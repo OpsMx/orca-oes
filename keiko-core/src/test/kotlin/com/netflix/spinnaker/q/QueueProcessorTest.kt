@@ -41,6 +41,7 @@ import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
+import org.mockito.Mockito.verifyNoInteractions
 
 object QueueProcessorTest : Spek({
   describe("the queue processor") {
@@ -77,7 +78,7 @@ object QueueProcessorTest : Spek({
       }
 
       it("does not poll the queue") {
-        verifyZeroInteractions(queue)
+        verifyNoInteractions(queue)
       }
     }
 
@@ -112,7 +113,7 @@ object QueueProcessorTest : Spek({
         }
 
         it("does not poll the queue") {
-          verifyZeroInteractions(queue)
+          verifyNoInteractions(queue)
         }
 
         it("fires an event") {

@@ -21,7 +21,8 @@
 apply plugin: "groovy"
 
 dependencies {
-  implementation("org.codehaus.groovy:groovy")
+  implementation("org.apache.groovy:groovy:4.0.9")
+  //implementation("org.codehaus.groovy:groovy")
   testImplementation("org.spockframework:spock-core")
   testImplementation("cglib:cglib-nodep")
   testImplementation("org.objenesis:objenesis")

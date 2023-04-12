@@ -17,43 +17,27 @@
 apply from: "$rootDir/gradle/groovy.gradle"
 
 dependencies {
-  api("com.squareup.retrofit:retrofit")
-  api("com.squareup.retrofit:converter-jackson")
-  api("org.codehaus.groovy:groovy")
+  api("com.squareup.retrofit:retrofit:1.9.0")
+  api("com.squareup.retrofit:converter-jackson:1.9.0")
+  api("org.apache.groovy:groovy")
   api("io.spinnaker.kork:kork-web")
-  api("com.jakewharton.retrofit:retrofit1-okhttp3-client")
+  api("com.jakewharton.retrofit:retrofit1-okhttp3-client:1.1.0")
+
+  implementation("com.squareup.retrofit:retrofit:1.9.0")
 
   implementation(project(":orca-core"))
   implementation("com.squareup.okhttp:okhttp")
-  implementation("com.squareup.okhttp:okhttp-urlconnection")
-  implementation("com.squareup.okhttp:okhttp-apache")
+  implementation("com.squareup.okhttp:okhttp-urlconnection:+")
+  implementation("com.squareup.okhttp:okhttp-apache:+")
   implementation("io.reactivex:rxjava")
-  implementation("io.spinnaker.kork:kork-retrofit")
+  implementation("org.objenesis:objenesis:2.5.1")
+  implementation("cglib:cglib-nodep:+")
+  implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.2.0")
   implementation("com.jakewharton.retrofit:retrofit1-okhttp3-client:1.1.0")
-  implementation "com.google.guava:guava"
 
-  testImplementation("com.squareup.retrofit:retrofit-mock")
-  testImplementation("org.assertj:assertj-core")
-  testImplementation("org.junit.jupiter:junit-jupiter-params")
-  testImplementation("org.mockito:mockito-core")
-  testImplementation("org.springframework.boot:spring-boot-test")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-  testRuntimeOnly("org.springframework:spring-test")
-
-  test {
-    useJUnitPlatform()
-  }
+  testImplementation("com.squareup.retrofit:retrofit-mock:1.9.0")
 }
 
-sourceSets {
-  main {
-    java { srcDirs = [] } // no source dirs for the java compiler
-    groovy { srcDirs = ["src/main/java", "src/main/groovy"] }  // compile everything in src/main with groovy
-  }
-
-  test {
-    java { srcDirs = [] } // no source dirs for the java compiler
-    groovy { srcDirs = ["src/test/java", "src/test/groovy"] }  // compile everything in src/test with groovy
-  }
-
+test {
+  useJUnitPlatform()
 }

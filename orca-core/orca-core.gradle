@@ -20,7 +20,7 @@ apply from: "$rootDir/gradle/spek.gradle"
 
 
 dependencies {
-  api("de.huxhorn.sulky:de.huxhorn.sulky.ulid")
+  api("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.2.0")
   api("io.spinnaker.kork:kork-artifacts")
   api("io.spinnaker.kork:kork-core")
   api("io.spinnaker.kork:kork-exceptions")
@@ -29,7 +29,8 @@ dependencies {
   api("io.spinnaker.kork:kork-plugins")
   api("io.spinnaker.kork:kork-security")
   api("io.spinnaker.kork:kork-telemetry")
-  api("io.reactivex:rxjava")
+  api("io.reactivex:rxjava:+")
+  api("org.objenesis:objenesis:2.5.1")
 
   api(project(":orca-api"))
   implementation("com.github.ben-manes.caffeine:guava")
@@ -37,37 +38,45 @@ dependencies {
   implementation("com.fasterxml.jackson.core:jackson-annotations")
   implementation("com.fasterxml.jackson.core:jackson-core")
   implementation("com.fasterxml.jackson.core:jackson-databind")
-  implementation("cglib:cglib-nodep")
+  implementation("cglib:cglib-nodep:+")
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-guava")
-  implementation("com.netflix.frigga:frigga")
+  implementation("com.netflix.frigga:frigga:+")
   implementation("com.netflix.spectator:spectator-api")
   implementation("io.spinnaker.kork:kork-core")
-  implementation("net.logstash.logback:logstash-logback-encoder")
+  implementation("net.logstash.logback:logstash-logback-encoder:+")
   implementation("org.springframework.security:spring-security-web")
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+  implementation("com.nhaarman:mockito-kotlin:+")
   implementation("org.apache.commons:commons-lang3")
   implementation("org.apache.httpcomponents:httpclient")
-  implementation("javax.servlet:javax.servlet-api:4.0.1")
-  implementation("javax.validation:validation-api")
+  implementation("jakarta.servlet:jakarta.servlet-api:+")
+  implementation("javax.validation:validation-api:+")
   implementation("com.jayway.jsonpath:json-path:2.2.0")
   implementation("org.yaml:snakeyaml")
-  implementation("org.codehaus.groovy:groovy")
-  implementation("net.javacrumbs.shedlock:shedlock-spring:4.44.0")
-  implementation("net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.44.0")
+  implementation("org.apache.groovy:groovy:4.0.9")
+  implementation("org.jetbrains.spek:spek-api:1.1.5")
+  implementation("org.jetbrains.spek:spek-subject-extension:+")
+
+  implementation("com.squareup.retrofit:retrofit:1.9.0")
 
   compileOnly("org.projectlombok:lombok")
   annotationProcessor("org.projectlombok:lombok")
 
   testImplementation(project(":orca-test"))
   testImplementation(project(":orca-test-groovy"))
-  testImplementation("com.github.tomakehurst:wiremock:2.17.0")
+  testImplementation("com.github.tomakehurst:wiremock:3.0.0-beta-7")
   testImplementation("org.junit.jupiter:junit-jupiter-api")
+  testImplementation("org.junit.platform:junit-platform-runner")
   testImplementation("org.assertj:assertj-core")
   testImplementation("org.mockito:mockito-core")
   testImplementation("org.mockito:mockito-junit-jupiter")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
 
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-api")
+}
+
+test {
+  useJUnitPlatform()
 }

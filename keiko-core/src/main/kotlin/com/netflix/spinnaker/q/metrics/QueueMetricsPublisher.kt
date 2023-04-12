@@ -75,6 +75,7 @@ class QueueMetricsPublisher(
       is LockFailed -> event.counter.increment()
       is MessageRescheduled -> event.counter.increment()
       is MessageNotFound -> event.counter.increment()
+      else -> {}
     }
   }
 

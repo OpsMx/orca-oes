@@ -6,8 +6,8 @@ dependencies {
   api "com.fasterxml.jackson.core:jackson-databind"
   api "org.springframework:spring-context"
 
-  implementation "com.netflix.spectator:spectator-api"
-  implementation "javax.annotation:javax.annotation-api"
-
+  implementation "com.netflix.spectator:spectator-api:1.5.4"
+  implementation "jakarta.annotation:jakarta.annotation-api:3.0.2"
+  implementation "org.jetbrains.spek:spek-junit-platform-engine:1.1.5"
   testImplementation project(":keiko-test-common")
 }

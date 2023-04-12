@@ -19,9 +19,13 @@ apply from: "$rootDir/gradle/groovy.gradle"
 dependencies {
   implementation(project(":orca-core"))
   implementation(project(":orca-retrofit"))
+  implementation("com.squareup.retrofit:retrofit:1.9.0")
   implementation("org.springframework:spring-context")
   implementation("org.springframework.boot:spring-boot-autoconfigure")
-  implementation("com.netflix.frigga:frigga")
+  implementation("com.netflix.frigga:frigga:+")
   implementation("io.spinnaker.kork:kork-core")
   implementation("io.spinnaker.kork:kork-moniker")
+  implementation("cglib:cglib-nodep:+")
+
+  implementation("com.jakewharton.retrofit:retrofit1-okhttp3-client:1.1.0")
 }

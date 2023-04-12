@@ -33,6 +33,6 @@ dependencies {
   implementation("org.springframework:spring-test")
 
   implementation("org.jetbrains.spek:spek-api")
-  implementation("org.jetbrains.spek:spek-subject-extension")
+  implementation("org.jetbrains.spek:spek-subject-extension:+")
 
 }

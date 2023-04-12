@@ -7,6 +7,7 @@ dependencies {
   implementation(project(":orca-core"))
   implementation(project(":orca-front50"))
   implementation("io.reactivex:rxjava")
+  implementation("cglib:cglib-nodep:+")
   implementation("net.logstash.logback:logstash-logback-encoder")
 
   testImplementation(project(":orca-core-tck"))

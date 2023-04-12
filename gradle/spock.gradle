@@ -22,10 +22,10 @@ apply plugin: "groovy"
 
 dependencies {
   testImplementation("org.spockframework:spock-core")
-  testImplementation("cglib:cglib-nodep")
+  testImplementation("cglib:cglib-nodep:+")
   testImplementation("org.objenesis:objenesis")
-  testImplementation("org.codehaus.groovy:groovy")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+  //testImplementation("org.codehaus.groovy:groovy")
+  testImplementation("org.apache.groovy:groovy:4.0.9")
 }
 
 tasks.compileGroovy.enabled = false

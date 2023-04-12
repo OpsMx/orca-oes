@@ -24,10 +24,10 @@ dependencies {
   implementation(project(":orca-clouddriver"))
   implementation("org.springframework:spring-context")
   implementation("org.springframework.boot:spring-boot-autoconfigure")
-  implementation("com.netflix.frigga:frigga")
+  implementation("com.netflix.frigga:frigga:+")
   implementation("io.spinnaker.kork:kork-moniker")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
   testImplementation(project(":orca-test-kotlin"))
-  testImplementation("com.github.tomakehurst:wiremock:2.15.0")
+  testImplementation("com.github.tomakehurst:wiremock:3.0.0-beta-7")
 }

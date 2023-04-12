@@ -97,6 +97,9 @@ class SqlRedisQueueShovelConfiguration {
   @ConditionalOnBean(SqlQueue::class)
   @ConditionalOnProperty(value = ["queue.shovel.kind"], havingValue = "redis-cluster-to-sql")
   fun redisClusterToSqlQueueShovel(
+    @Value("\${redis.connection:redis://localhost:6379}") mainConnection: String,
+    @Value("\${redis.timeout:2000}") timeout: Int,
+    redisPoolConfig: GenericObjectPoolConfig<*>,
     queue: SqlQueue,
     cluster: JedisCluster,
     clock: Clock,
@@ -108,9 +111,19 @@ class SqlRedisQueueShovelConfiguration {
     discoveryActivator: Activator,
     dynamicConfigService: DynamicConfigService
   ): QueueShovel {
+    val jedisPool = JedisPoolFactory(registry).build(
+      "previousQueue",
+      JedisDriverProperties().apply {
+        connection = mainConnection
+        timeoutMs = timeout
+        poolConfig = redisPoolConfig
+      },
+      redisPoolConfig
+    )
     val previousQueue = RedisClusterQueue(
       queueName = redisQueueProperties.queueName,
       jedisCluster = cluster,
+      pool = jedisPool,
       clock = clock,
       mapper = mapper,
       serializationMigrator = serializationMigrator,

@@ -34,16 +34,21 @@ import java.util.Optional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
+import redis.clients.jedis.Connection
+import redis.clients.jedis.Jedis
 import redis.clients.jedis.JedisCluster
 import redis.clients.jedis.Transaction
 import redis.clients.jedis.exceptions.JedisDataException
 import redis.clients.jedis.params.ZAddParams.zAddParams
 import redis.clients.jedis.util.JedisClusterCRC16
+import redis.clients.jedis.util.Pool
+
 
 @KotlinOpen
 class RedisClusterQueue(
   private val queueName: String,
   private val jedisCluster: JedisCluster,
+  private val pool: Pool<Jedis>,
   private val clock: Clock,
   private val lockTtlSeconds: Int = 10,
   private val mapper: ObjectMapper,
@@ -175,12 +180,13 @@ class RedisClusterQueue(
               fire(MessageDead)
             } else {
               if (jedisCluster.zismember(queueKey, fingerprint)) {
-                jedisCluster
-                  .multi {
+                pool.resource.use { redis ->
+                  redis.multi {
                     zrem(unackedKey, fingerprint)
                     zadd(queueKey, score(), fingerprint)
                     hincrBy(attemptsKey, fingerprint, 1L)
                   }
+                }
                 log.info(
                   "Not retrying message $fingerprint because an identical message " +
                     "is already on the queue"
@@ -202,21 +208,23 @@ class RedisClusterQueue(
   }
 
   override fun readState(): QueueState =
-    jedisCluster.multi {
-      zcard(queueKey)
-      zcount(queueKey, 0.0, score())
-      zcard(unackedKey)
-      hlen(messagesKey)
-    }
-      .map { (it as Long).toInt() }
-      .let { (queued, ready, processing, messages) ->
-        return QueueState(
-          depth = queued,
-          ready = ready,
-          unacked = processing,
-          orphaned = messages - (queued + processing)
-        )
+    pool.resource.use { redis ->
+      redis.multi {
+        zcard(queueKey)
+        zcount(queueKey, 0.0, score())
+        zcard(unackedKey)
+        hlen(messagesKey)
       }
+        .map { (it as Long).toInt() }
+        .let { (queued, ready, processing, messages) ->
+          return@let QueueState(
+            depth = queued,
+            ready = ready,
+            unacked = processing,
+            orphaned = messages - (queued + processing)
+          )
+        }
+    }
 
   override fun containsMessage(predicate: (Message) -> Boolean): Boolean {
     var found = false
@@ -243,27 +251,32 @@ class RedisClusterQueue(
     message.setAttribute(
       message.getAttribute() ?: AttemptsAttribute()
     )
-
-    multi {
-      hset(messagesKey, fingerprint, mapper.writeValueAsString(message))
-      zadd(queueKey, score(delay), fingerprint)
+    pool.resource.use { redis ->
+      redis.multi {
+        hset(messagesKey, fingerprint, mapper.writeValueAsString(message))
+        zadd(queueKey, score(delay), fingerprint)
+      }
     }
   }
 
   internal fun JedisCluster.requeueMessage(fingerprint: String) {
-    multi {
-      zrem(unackedKey, fingerprint)
-      zadd(queueKey, score(), fingerprint)
+    pool.resource.use { redis ->
+      redis.multi {
+        zrem(unackedKey, fingerprint)
+        zadd(queueKey, score(), fingerprint)
+      }
     }
   }
 
   internal fun JedisCluster.removeMessage(fingerprint: String) {
-    multi {
-      zrem(queueKey, fingerprint)
-      zrem(unackedKey, fingerprint)
-      hdel(messagesKey, fingerprint)
-      del("$locksKey:$fingerprint")
-      hdel(attemptsKey, fingerprint)
+    pool.resource.use { redis ->
+      redis.multi {
+        zrem(queueKey, fingerprint)
+        zrem(unackedKey, fingerprint)
+        hdel(messagesKey, fingerprint)
+        del("$locksKey:$fingerprint")
+        hdel(attemptsKey, fingerprint)
+      }
     }
   }
 
@@ -357,23 +370,15 @@ class RedisClusterQueue(
     }
   }
 
-  fun JedisCluster.multi(block: Transaction.() -> Unit) =
-    getConnectionFromSlot(JedisClusterCRC16.getSlot(queueKey))
-      .use { c ->
-        c.multi()
-          .let { tx ->
-            tx.block()
-            tx.exec()
-          }
-      }
-
   private fun ackMessage(fingerprint: String) {
     if (jedisCluster.zismember(queueKey, fingerprint)) {
       // only remove this message from the unacked queue as a matching one has
       // been put on the main queue
-      jedisCluster.multi {
-        zrem(unackedKey, fingerprint)
-        del("$locksKey:$fingerprint")
+      pool.resource.use { redis ->
+        redis.multi {
+          zrem(unackedKey, fingerprint)
+          del("$locksKey:$fingerprint")
+        }
       }
     } else {
       jedisCluster.removeMessage(fingerprint)

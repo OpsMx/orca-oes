@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
-@ExtendWith(SpringExtension::class)
+//@ExtendWith(SpringExtension::class)
 @SpringBootTest(
   classes = [QueueConfiguration::class, MemQueueConfiguration::class, TestConfiguration::class],
   webEnvironment = SpringBootTest.WebEnvironment.NONE

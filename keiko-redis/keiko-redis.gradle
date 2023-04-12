@@ -3,12 +3,11 @@ apply from: "$rootDir/gradle/spek.gradle"
 
 dependencies {
   api project(":keiko-core")
-  api("redis.clients:jedis")
+  api "redis.clients:jedis:4.3.1"
   api "com.fasterxml.jackson.core:jackson-databind"
   api "com.fasterxml.jackson.module:jackson-module-kotlin"
   api "io.arrow-kt:arrow-core"
   api "com.github.ben-manes.caffeine:guava"
-
   testImplementation project(":keiko-tck")
   testImplementation "io.spinnaker.kork:kork-jedis-test"
 }

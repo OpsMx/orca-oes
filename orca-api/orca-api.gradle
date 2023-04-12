@@ -15,7 +15,7 @@
  */
 
 plugins {
-  id("net.ltgt.errorprone") version "1.2.1"
+ // id("net.ltgt.errorprone") version "1.2.1"
 }
 
 apply from: "$rootDir/gradle/kotlin.gradle"
@@ -28,7 +28,7 @@ sourceSets {
 }
 
 dependencies {
-  errorprone("com.google.errorprone:error_prone_core:2.4.0")
+  //errorprone("com.google.errorprone:error_prone_core:2.4.0")
 
   implementation platform("io.spinnaker.kork:kork-bom:$korkVersion")
   annotationProcessor platform("io.spinnaker.kork:kork-bom:$korkVersion")
@@ -38,6 +38,8 @@ dependencies {
   //TODO(jonsie): Remove this dependency
   api("io.spinnaker.kork:kork-artifacts")
 
+  implementation("org.objenesis:objenesis:2.5.1")
+  implementation("cglib:cglib-nodep:+")
   compileOnly("org.projectlombok:lombok")
   annotationProcessor("org.projectlombok:lombok")
 

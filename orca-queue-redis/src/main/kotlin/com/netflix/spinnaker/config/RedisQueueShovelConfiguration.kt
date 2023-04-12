@@ -41,10 +41,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import redis.clients.jedis.HostAndPort
-import redis.clients.jedis.Jedis
-import redis.clients.jedis.JedisCluster
-import redis.clients.jedis.Protocol
+import redis.clients.jedis.*
 import redis.clients.jedis.util.Pool
 
 @Configuration
@@ -84,7 +81,7 @@ class RedisQueueShovelConfiguration {
     @Value("\${redis.connection-previous}") previousConnection: String,
     @Value("\${redis.timeout:2000}") timeout: Int,
     @Value("\${redis.maxattempts:4}") maxAttempts: Int,
-    redisPoolConfig: GenericObjectPoolConfig<Jedis>,
+    redisPoolConfig: GenericObjectPoolConfig<Connection>,
     registry: Registry
   ): JedisCluster {
     if (mainConnection == previousConnection) {
@@ -130,6 +127,7 @@ class RedisQueueShovelConfiguration {
   @ConditionalOnBean(name = ["previousJedisCluster"])
   fun previousRedisClusterQueue(
     @Qualifier("previousJedisCluster") cluster: JedisCluster,
+    @Qualifier("previousQueueJedisPool") redisPool: Pool<Jedis>,
     redisQueueProperties: RedisQueueProperties,
     clock: Clock,
     deadMessageHandler: DeadMessageCallback,
@@ -140,6 +138,7 @@ class RedisQueueShovelConfiguration {
     RedisClusterQueue(
       queueName = redisQueueProperties.queueName,
       jedisCluster = cluster,
+      pool = redisPool,
       clock = clock,
       mapper = redisQueueObjectMapper,
       deadMessageHandlers = listOf(deadMessageHandler),

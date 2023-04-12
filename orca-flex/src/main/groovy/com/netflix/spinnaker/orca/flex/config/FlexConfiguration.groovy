@@ -17,6 +17,7 @@
 package com.netflix.spinnaker.orca.flex.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.Gson
 import com.netflix.spinnaker.orca.flex.FlexService
 import com.netflix.spinnaker.orca.retrofit.RetrofitConfiguration
 import com.netflix.spinnaker.orca.retrofit.logging.RetrofitSlf4jLog
@@ -31,7 +32,7 @@ import org.springframework.context.annotation.Import
 import retrofit.Endpoint
 import retrofit.RestAdapter
 import retrofit.client.Client
-import retrofit.converter.JacksonConverter
+import retrofit.converter.GsonConverter
 import static retrofit.Endpoints.newFixedEndpoint
 
 @Configuration
@@ -60,7 +61,7 @@ class FlexConfiguration {
       .setClient(retrofitClient)
       .setLogLevel(retrofitLogLevel)
       .setLog(new RetrofitSlf4jLog(FlexService))
-      .setConverter(new JacksonConverter(mapper))
+      .setConverter(new GsonConverter(mapper as Gson))
       .build()
       .create(FlexService)
   }

@@ -24,7 +24,7 @@ dependencies {
   implementation(project(":orca-core"))
   implementation(project(":orca-interlink"))
   implementation(project(":orca-queue"))
-
+  implementation("io.vavr:vavr:1.0.0-alpha-4")
   implementation("io.spinnaker.kork:kork-sql")
   implementation("io.spinnaker.kork:kork-telemetry")
   implementation("com.netflix.spectator:spectator-api")
@@ -36,6 +36,7 @@ dependencies {
   implementation("org.liquibase:liquibase-core")
   implementation("com.zaxxer:HikariCP")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
   implementation("net.javacrumbs.shedlock:shedlock-spring:4.44.0")
   implementation("net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.44.0")
 
@@ -45,14 +46,17 @@ dependencies {
   testImplementation("io.strikt:strikt-core")
   testImplementation("org.assertj:assertj-core")
   testImplementation("org.junit.jupiter:junit-jupiter-api")
-  testImplementation("dev.minutest:minutest")
-  testImplementation("com.nhaarman:mockito-kotlin")
+  testImplementation("dev.minutest:minutest:1.13.0")
+  testImplementation("com.nhaarman:mockito-kotlin:+")
   testImplementation("org.testcontainers:mysql")
   testImplementation("org.testcontainers:postgresql")
 
   testRuntimeOnly("mysql:mysql-connector-java")
   testRuntimeOnly("org.postgresql:postgresql")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+  testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+  api "com.jcraft:jsch.agentproxy.connector-factory:0.0.9"
 }
 
 test {

@@ -1,4 +1,4 @@
-FROM quay.io/opsmxpublic/ubi8-jre-11:v1
+FROM quay.io/opsmxpublic/ubifips:8.7
 LABEL name='orca'
 LABEL maintainer='info@opsmx.io'
 LABEL summary='Red Hat certified Open Enterprise Spinnaker ubi8 container image for orca'
@@ -7,7 +7,7 @@ LABEL vendor='OpsMx'
 
 COPY orca-web/build/install/orca /opt/orca
 RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Critical --setopt=tsflags=nodocs
-RUN yum -y install java-11-openjdk-headless.x86_64 wget vim curl net-tools nettle
+RUN yum -y install java-17-openjdk-devel wget vim curl net-tools nettle
 RUN yum -y update
 RUN useradd spinnaker
 RUN mkdir -p /opt/orca/plugins

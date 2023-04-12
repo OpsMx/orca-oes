@@ -15,7 +15,9 @@
  */
 
 apply from: "$rootDir/gradle/kotlin.gradle"
+
 apply plugin: "java"
+apply plugin: "groovy"
 
 dependencies {
   implementation(project(":orca-core"))
@@ -25,9 +27,9 @@ dependencies {
   annotationProcessor("org.projectlombok:lombok")
 
   testImplementation(project(":orca-test"))
-  testImplementation("dev.minutest:minutest")
+  testImplementation("dev.minutest:minutest:1.13.0")
   testImplementation("io.strikt:strikt-core")
-  testImplementation("io.mockk:mockk")
+  testImplementation("io.mockk:mockk:+")
 }
 
 test {

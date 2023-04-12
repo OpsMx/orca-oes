@@ -21,6 +21,7 @@ dependencies {
   implementation(project(":orca-retrofit"))
 
   implementation("org.springframework.boot:spring-boot-autoconfigure")
+  implementation("com.jakewharton.retrofit:retrofit1-okhttp3-client:1.1.0")
 
   compileOnly("org.projectlombok:lombok")
   annotationProcessor("org.projectlombok:lombok")

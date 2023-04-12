@@ -118,7 +118,9 @@ public class CloudDriverService {
   }
 
   @Deprecated
-  /** @deprecated See {@link #getInstanceTyped(String, String, String)}.* */
+  /**
+   * @deprecated See {@link #getInstanceTyped(String, String, String)}.*
+   */
   public Map<String, Object> getInstance(String account, String region, String instanceId) {
     Response response = oortService.getInstance(account, region, instanceId);
     return readBody(response, JSON_MAP);

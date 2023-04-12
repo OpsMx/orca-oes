@@ -5,6 +5,8 @@ dependencies {
   api project(":keiko-redis")
   api project(":keiko-spring")
 
+  implementation "org.jetbrains.spek:spek-subject-extension:+"
+  implementation "com.nhaarman:mockito-kotlin:+"
   testImplementation "org.junit.jupiter:junit-jupiter-api"
   testImplementation "org.springframework:spring-test"
   testImplementation "org.springframework.boot:spring-boot-test"
@@ -15,6 +17,6 @@ dependencies {
 
 test {
   useJUnitPlatform {
-    includeEngines "jupiter"
+    includeEngines "junit-vintage", "junit-jupiter"
   }
 }

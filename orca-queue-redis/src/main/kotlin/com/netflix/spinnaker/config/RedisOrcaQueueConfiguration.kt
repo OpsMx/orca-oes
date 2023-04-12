@@ -100,6 +100,7 @@ class RedisOrcaQueueConfiguration : RedisQueueConfiguration() {
   @Primary
   override fun clusterQueue(
     @Qualifier("queueRedisCluster") cluster: JedisCluster,
+    @Qualifier("queueRedisPool") redisPool: Pool<Jedis>,
     redisQueueProperties: RedisQueueProperties,
     clock: Clock,
     deadMessageHandler: RedisClusterDeadMessageHandler,
@@ -109,6 +110,7 @@ class RedisOrcaQueueConfiguration : RedisQueueConfiguration() {
   ): RedisClusterQueue {
     return super.clusterQueue(
       cluster,
+      redisPool,
       redisQueueProperties,
       clock,
       deadMessageHandler,

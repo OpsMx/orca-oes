@@ -35,6 +35,7 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
+import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.internal.verification.Times
 
 abstract class QueueTest<out Q : Queue>(
@@ -72,7 +73,7 @@ abstract class QueueTest<out Q : Queue>(
       }
 
       it("does not invoke the callback") {
-        verifyZeroInteractions(callback)
+        verifyNoInteractions(callback)
       }
     }
 
@@ -143,7 +144,7 @@ abstract class QueueTest<out Q : Queue>(
         }
 
         it("does not invoke the callback") {
-          verifyZeroInteractions(callback)
+          verifyNoInteractions(callback)
         }
       }
 
@@ -196,7 +197,7 @@ abstract class QueueTest<out Q : Queue>(
       }
 
       it("does not retry the message") {
-        verifyZeroInteractions(callback)
+        verifyNoInteractions(callback)
       }
     }
 
@@ -252,7 +253,7 @@ abstract class QueueTest<out Q : Queue>(
       }
 
       it("does not retry the message") {
-        verifyZeroInteractions(callback)
+        verifyNoInteractions(callback)
       }
 
       on("polling the queue after the message acknowledgment override has timed out") {
@@ -325,7 +326,7 @@ abstract class QueueTest<out Q : Queue>(
       }
 
       it("stops retrying the message") {
-        verifyZeroInteractions(callback)
+        verifyNoInteractions(callback)
       }
 
       it("passes the failed message to the dead letter handler") {
@@ -341,7 +342,7 @@ abstract class QueueTest<out Q : Queue>(
         }
 
         it("it does not get redelivered again") {
-          verifyZeroInteractions(callback)
+          verifyNoInteractions(callback)
         }
 
         it("no longer gets sent to the dead letter handler") {
@@ -473,7 +474,7 @@ abstract class QueueTest<out Q : Queue>(
         }
 
         it("did not enqueue the duplicate message") {
-          verifyZeroInteractions(callback)
+          verifyNoInteractions(callback)
         }
       }
 

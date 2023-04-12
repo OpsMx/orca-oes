@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.*
 import retrofit.RetrofitError
 import retrofit.http.Query
 
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletResponse
 
 import static com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType.ORCHESTRATION
 import static com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType.PIPELINE

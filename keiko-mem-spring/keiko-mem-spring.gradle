@@ -5,16 +5,21 @@ dependencies {
   api project(":keiko-mem")
   api project(":keiko-spring")
 
+  implementation "org.jetbrains.spek:spek-api"
+  implementation "org.jetbrains.spek:spek-subject-extension:+"
+  implementation "com.nhaarman:mockito-kotlin:+"
   testImplementation "org.junit.jupiter:junit-jupiter-api"
   testImplementation "org.springframework:spring-test"
   testImplementation "org.springframework.boot:spring-boot-test"
   testImplementation "org.assertj:assertj-core"
 
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+  testImplementation("org.spockframework:spock-core:+")
+
 }
 
 test {
   useJUnitPlatform {
-    includeEngines "jupiter"
+    includeEngines "junit-vintage", "junit-jupiter"
   }
 }

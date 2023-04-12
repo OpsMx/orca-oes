@@ -30,7 +30,7 @@ object InMemoryMonitorableQueueTest : MonitorableQueueTest<InMemoryQueue>(
   InMemoryQueue::retry
 )
 
-private val createQueueNoPublisher = { clock: Clock,
+public val createQueueNoPublisher = { clock: Clock,
   deadLetterCallback: DeadMessageCallback ->
   createQueue(clock, deadLetterCallback, null)
 }

@@ -26,6 +26,7 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.lifecycle.CachingMode.GROUP
 import org.jetbrains.spek.subject.SubjectSpek
+import org.mockito.Mockito.verifyNoInteractions
 
 object MessageHandlerTest : SubjectSpek<MessageHandler<*>>({
 
@@ -58,7 +59,7 @@ object MessageHandlerTest : SubjectSpek<MessageHandler<*>>({
     }
 
     it("does not invoke the handler") {
-      verifyZeroInteractions(handleCallback)
+      verifyNoInteractions(handleCallback)
     }
   }
 

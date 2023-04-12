@@ -32,6 +32,8 @@ dependencies {
   testImplementation(project(":orca-test-groovy"))
   testImplementation("org.springframework:spring-test")
   testImplementation("io.spinnaker.fiat:fiat-core:$fiatVersion")
+  testImplementation "cglib:cglib-nodep:3.3.0"
+
 }
 
 sourceSets {
