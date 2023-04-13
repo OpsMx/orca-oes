@@ -7,7 +7,7 @@ dependencies {
   api "com.fasterxml.jackson.module:jackson-module-kotlin"
   api "io.arrow-kt:arrow-core"
   api "com.github.ben-manes.caffeine:guava"
-
+  implementation "io.vavr:vavr:1.0.0-alpha-4"
   implementation "io.spinnaker.kork:kork-core"
   implementation "io.spinnaker.kork:kork-exceptions"
   implementation "io.spinnaker.kork:kork-sql"

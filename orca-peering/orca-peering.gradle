@@ -23,6 +23,6 @@ dependencies {
   implementation("io.spinnaker.kork:kork-sql")
   implementation("org.jooq:jooq")
   implementation("org.springframework.boot:spring-boot-autoconfigure")
-
+  implementation("io.vavr:vavr:1.0.0-alpha-4")
   testImplementation(project(":orca-test-groovy"))
 }
