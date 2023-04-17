@@ -19,6 +19,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.springframework.context.annotation.AnnotationConfigUtils.EVENT_LISTENER_FACTORY_BEAN_NAME;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.spectator.api.DefaultRegistry;
 import com.netflix.spectator.api.Registry;
 import com.netflix.spinnaker.config.PluginsAutoConfiguration;
 import com.netflix.spinnaker.kork.api.expressions.ExpressionFunctionProvider;
@@ -162,6 +163,11 @@ public class OrcaConfiguration {
       ExpressionProperties expressionProperties) {
     return new ContextParameterProcessor(
         expressionFunctionProviders, pluginManager, dynamicConfigService, expressionProperties);
+  }
+
+  @Bean
+  DefaultRegistry getRegistry() {
+    return new DefaultRegistry();
   }
 
   @Bean
