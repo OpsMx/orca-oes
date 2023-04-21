@@ -60,9 +60,17 @@ subprojects {
     }
     dependencies {
       api("redis.clients:jedis:4.3.1")
-      implementation(enforcedPlatform("io.spinnaker.kork:kork-bom:$korkVersion"))
-      annotationProcessor(platform("io.spinnaker.kork:kork-bom:$korkVersion"))
-      testAnnotationProcessor(platform("io.spinnaker.kork:kork-bom:$korkVersion"))
+      implementation(enforcedPlatform("io.spinnaker.kork:kork-bom:$korkVersion")){
+        exclude group: 'com.squareup.okhtt3', module: 'okhttp'
+      }
+      annotationProcessor(platform("io.spinnaker.kork:kork-bom:$korkVersion")){
+        exclude group: 'com.squareup.okhtt3', module: 'okhttp'
+      }
+      testAnnotationProcessor(platform("io.spinnaker.kork:kork-bom:$korkVersion")){
+        exclude group: 'com.squareup.okhtt3', module: 'okhttp'
+      }
+      implementation("com.squareup.okio:okio-jvm:3.2.0")
+      implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
       implementation("org.slf4j:slf4j-api")
       implementation("com.jakewharton.retrofit:retrofit1-okhttp3-client:1.1.0")
       implementation("net.logstash.logback:logstash-logback-encoder:4.11")

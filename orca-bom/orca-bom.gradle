@@ -22,7 +22,9 @@ javaPlatform {
 }
 
 dependencies {
-  api(platform("io.spinnaker.kork:kork-bom:$korkVersion"))
+  api(platform("io.spinnaker.kork:kork-bom:$korkVersion")){
+    exclude group: 'com.squareup.okhtt3', module: 'okhttp'
+  }
 
   constraints {
     api("io.spinnaker.fiat:fiat-api:$fiatVersion")
