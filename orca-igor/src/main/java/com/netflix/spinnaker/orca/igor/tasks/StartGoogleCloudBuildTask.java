@@ -33,6 +33,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import retrofit.client.Response;
@@ -47,7 +48,7 @@ public class StartGoogleCloudBuildTask implements Task {
 
   private final RetrySupport retrySupport = new RetrySupport();
   private static final ThreadLocal<Yaml> yamlParser =
-      ThreadLocal.withInitial(() -> new Yaml(new SafeConstructor()));
+      ThreadLocal.withInitial(() -> new Yaml(new SafeConstructor(new LoaderOptions())));
 
   @Override
   @Nonnull

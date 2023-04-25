@@ -44,6 +44,4 @@ class OrcaQueueConfiguration {
   @ConditionalOnMissingBean(Queue::class)
   fun queue(): Queue = NoopQueue()
 
-  @Bean
-  fun queueExecutionRunner(): QueueExecutionRunner = QueueExecutionRunner(queue())
 }

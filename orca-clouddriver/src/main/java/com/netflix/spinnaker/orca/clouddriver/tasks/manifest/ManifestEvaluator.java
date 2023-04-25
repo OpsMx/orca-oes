@@ -50,6 +50,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import retrofit.client.Response;
@@ -59,7 +60,7 @@ import retrofit.client.Response;
 @NonnullByDefault
 public class ManifestEvaluator implements CloudProviderAware {
   private static final ThreadLocal<Yaml> yamlParser =
-      ThreadLocal.withInitial(() -> new Yaml(new SafeConstructor()));
+      ThreadLocal.withInitial(() -> new Yaml(new SafeConstructor(new LoaderOptions())));
   private static final ObjectMapper objectMapper = OrcaObjectMapper.getInstance();
 
   private final ArtifactUtils artifactUtils;

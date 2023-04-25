@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.representer.Representer;
@@ -48,12 +49,12 @@ public class PipelineTemplateConverter {
     p.put("variables", new ArrayList<>());
     p.put("stages", convertStages((List) pipeline.get("stages")));
 
-    Representer representer = new Representer();
+    Representer representer = new Representer(new DumperOptions());
     DumperOptions options = new DumperOptions();
     options.setIndent(2);
     options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
     options.setSplitLines(false);
-    Yaml yaml = new Yaml(new SafeConstructor(), representer, options);
+    Yaml yaml = new Yaml(new SafeConstructor(new LoaderOptions()), representer, options);
 
     String output = yaml.dump(p);
 
