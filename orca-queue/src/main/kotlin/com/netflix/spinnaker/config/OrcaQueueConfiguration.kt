@@ -16,8 +16,6 @@
 
 package com.netflix.spinnaker.config
 
-import com.netflix.spinnaker.orca.pipeline.ExecutionRunner
-import com.netflix.spinnaker.orca.q.QueueExecutionRunner
 import com.netflix.spinnaker.q.NoopQueue
 import com.netflix.spinnaker.q.Queue
 import java.time.Clock
@@ -43,5 +41,4 @@ class OrcaQueueConfiguration {
   @Bean
   @ConditionalOnMissingBean(Queue::class)
   fun queue(): Queue = NoopQueue()
-
 }
