@@ -30,12 +30,8 @@ sourceSets {
 dependencies {
   //errorprone("com.google.errorprone:error_prone_core:2.4.0")
 
-  implementation platform("io.spinnaker.kork:kork-bom:$korkVersion"){
-    exclude group: 'com.squareup.okhtt3', module: 'okhttp'
-  }
-  annotationProcessor platform("io.spinnaker.kork:kork-bom:$korkVersion"){
-    exclude group: 'com.squareup.okhtt3', module: 'okhttp'
-  }
+  implementation platform("io.spinnaker.kork:kork-bom:$korkVersion")
+  annotationProcessor platform("io.spinnaker.kork:kork-bom:$korkVersion")
 
   api("io.spinnaker.kork:kork-plugins-api")
 
