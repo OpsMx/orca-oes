@@ -39,6 +39,7 @@ import com.netflix.spinnaker.orca.pipelinetemplate.v1schema.render.YamlRenderedV
 import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.unitils.reflectionassert.ReflectionComparatorMode
+import org.yaml.snakeyaml.LoaderOptions
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.SafeConstructor
 import spock.lang.Specification
@@ -97,7 +98,7 @@ class V1SchemaIntegrationSpec extends Specification {
 
   private static class IntegrationTestDataProvider {
 
-    Yaml yaml = new Yaml(new SafeConstructor())
+    Yaml yaml = new Yaml(new SafeConstructor(new LoaderOptions()))
     ObjectMapper objectMapper = OrcaObjectMapper.newInstance()
 
     List<IntegrationTest> provide() {

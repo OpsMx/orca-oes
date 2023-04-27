@@ -28,6 +28,7 @@ import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType
 import com.netflix.spinnaker.orca.pipeline.util.ArtifactUtils
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
+import org.yaml.snakeyaml.LoaderOptions
 import retrofit.client.Response
 
 import javax.annotation.Nullable
@@ -51,7 +52,7 @@ class EcsServerGroupCreator implements ServerGroupCreator, DeploymentDetailsAwar
   final private OortService oortService
   private final ContextParameterProcessor contextParameterProcessor
   private static final ThreadLocal<Yaml> yamlParser =
-      ThreadLocal.withInitial({ -> new Yaml(new SafeConstructor()) })
+      ThreadLocal.withInitial({ -> new Yaml(new SafeConstructor(new LoaderOptions())) })
 
   final String cloudProvider = "ecs"
   final boolean katoResultExpected = false
