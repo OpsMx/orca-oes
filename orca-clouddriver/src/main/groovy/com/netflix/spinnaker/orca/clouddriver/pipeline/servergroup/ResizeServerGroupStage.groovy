@@ -16,7 +16,6 @@
 
 package com.netflix.spinnaker.orca.clouddriver.pipeline.servergroup
 
-import com.netflix.spinnaker.orca.api.pipeline.graph.StageDefinitionBuilder
 import com.netflix.spinnaker.orca.api.pipeline.models.StageExecution
 import com.netflix.spinnaker.orca.clouddriver.pipeline.providers.aws.ModifyAwsScalingProcessStage
 import com.netflix.spinnaker.orca.clouddriver.pipeline.servergroup.support.TargetServerGroupLinearStageSupport
@@ -38,17 +37,16 @@ import org.springframework.stereotype.Component
 @Component
 @Slf4j
 class ResizeServerGroupStage extends TargetServerGroupLinearStageSupport {
-  public static final String TYPE = StageDefinitionBuilder.getType(ResizeServerGroupStage)
-//  public static final String TYPE = ResizeServerGroupStage.getType(ResizeServerGroupStage)
+  public static String TYPE = getType(ResizeServerGroupStage)
 
   @Override
   protected void taskGraphInternal(StageExecution stage, TaskNode.Builder builder) {
     builder
-      .withTask("determineHealthProviders", DetermineHealthProvidersTask)
-      .withTask("resizeServerGroup", ResizeServerGroupTask)
-      .withTask("monitorServerGroup", MonitorKatoTask)
-      .withTask("forceCacheRefresh", ServerGroupCacheForceRefreshTask)
-      .withTask("waitForCapacityMatch", WaitForCapacityMatchTask)
+            .withTask("determineHealthProviders", DetermineHealthProvidersTask)
+            .withTask("resizeServerGroup", ResizeServerGroupTask)
+            .withTask("monitorServerGroup", MonitorKatoTask)
+            .withTask("forceCacheRefresh", ServerGroupCacheForceRefreshTask)
+            .withTask("waitForCapacityMatch", WaitForCapacityMatchTask)
   }
 
   @Override
@@ -58,12 +56,12 @@ class ResizeServerGroupStage extends TargetServerGroupLinearStageSupport {
         it.name = "resumeScalingProcesses"
         it.type = ModifyAwsScalingProcessStage.TYPE
         it.context = [
-          serverGroupName: getServerGroupName(descriptor),
-          cloudProvider  : descriptor.cloudProvider,
-          credentials    : descriptor.credentials,
-          region         : descriptor.region,
-          action         : "resume",
-          processes      : ["Launch", "Terminate"]
+                serverGroupName: getServerGroupName(descriptor),
+                cloudProvider  : descriptor.cloudProvider,
+                credentials    : descriptor.credentials,
+                region         : descriptor.region,
+                action         : "resume",
+                processes      : ["Launch", "Terminate"]
         ]
       }
     }
@@ -76,11 +74,11 @@ class ResizeServerGroupStage extends TargetServerGroupLinearStageSupport {
         it.name = "suspendScalingProcesses"
         it.type = ModifyAwsScalingProcessStage.TYPE
         it.context = [
-          serverGroupName: getServerGroupName(descriptor),
-          cloudProvider  : descriptor.cloudProvider,
-          credentials    : descriptor.credentials,
-          region         : descriptor.region,
-          action         : "suspend"
+                serverGroupName: getServerGroupName(descriptor),
+                cloudProvider  : descriptor.cloudProvider,
+                credentials    : descriptor.credentials,
+                region         : descriptor.region,
+                action         : "suspend"
         ]
       }
     }

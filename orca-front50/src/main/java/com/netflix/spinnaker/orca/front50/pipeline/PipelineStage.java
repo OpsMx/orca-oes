@@ -45,8 +45,7 @@ public class PipelineStage implements StageDefinitionBuilder, CancellableStage {
   @Value("${stages.pipeline.defaultSkipDownstreamOutput:false}")
   private boolean defaultSkipDownstreamOutput;
 
-  public static final String PIPELINE_CONFIG_TYPE =
-      StageDefinitionBuilder.getType(PipelineStage.class);
+  public static String PIPELINE_CONFIG_TYPE = StageDefinitionBuilder.getType(PipelineStage.class);
 
   final ExecutionRepository executionRepository;
 

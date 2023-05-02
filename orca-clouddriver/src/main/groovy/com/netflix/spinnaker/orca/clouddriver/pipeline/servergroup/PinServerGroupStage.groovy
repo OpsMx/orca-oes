@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component
 @Slf4j
 class PinServerGroupStage extends TargetServerGroupLinearStageSupport {
 //  public static final String TYPE = getType(PinServerGroupStage)
-  public static final String TYPE = StageDefinitionBuilder.getType(PinServerGroupStage)
+  public static   String TYPE = StageDefinitionBuilder.getType(PinServerGroupStage)
 
   @Override
   protected void taskGraphInternal(StageExecution stage, TaskNode.Builder builder) {

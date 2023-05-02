@@ -41,7 +41,7 @@ public class MonitorPipelineStage implements StageDefinitionBuilder {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
 
-  public static final String PIPELINE_CONFIG_TYPE =
+  public static String PIPELINE_CONFIG_TYPE =
       StageDefinitionBuilder.getType(MonitorPipelineStage.class);
 
   final ExecutionRepository executionRepository;

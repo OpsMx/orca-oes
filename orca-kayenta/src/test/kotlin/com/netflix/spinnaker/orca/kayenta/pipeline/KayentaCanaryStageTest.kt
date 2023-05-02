@@ -78,6 +78,7 @@ object KayentaCanaryStageTest : Spek({
   }
 })
 
+@OptIn(ExperimentalStdlibApi::class)
 private operator fun <E> List<E>.get(range: IntRange): List<E> {
   return subList(range.start, range.endExclusive)
 }

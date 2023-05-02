@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component
 @CompileStatic
 class ModifyAwsScalingProcessStage extends TargetServerGroupLinearStageSupport implements ForceCacheRefreshAware {
 
-  public static final String TYPE = StageDefinitionBuilder.getType(ModifyAwsScalingProcessStage)
+  public static   String TYPE = StageDefinitionBuilder.getType(ModifyAwsScalingProcessStage)
 
   private final DynamicConfigService dynamicConfigService
 
