@@ -29,9 +29,12 @@ RUN fips-mode-setup --enable
 RUN update-crypto-policies --set FIPS
 
 
+
+
 COPY orca-web/build/install/orca /opt/orca
 #RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Critical --setopt=tsflags=nodocs
 #RUN yum -y install java-17-openjdk-devel wget vim curl net-tools nettle
+RUN yum -y install wget
 #RUN yum -y update
 RUN useradd spinnaker
 RUN mkdir -p /opt/orca/plugins
@@ -40,7 +43,7 @@ RUN mkdir -p /opt/orca/plugins
 
 RUN chmod -R 777 /opt/orca/plugins/
 RUN chown -R spinnaker:spinnaker /opt/
-RUN yum -y remove  tar wget vim
+RUN yum -y remove  tar  vim
 RUN yum -y remove clean all && rm -rf /var/cache
 USER spinnaker
 CMD ["/opt/orca/bin/orca"]
