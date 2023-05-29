@@ -17,7 +17,6 @@
 package com.netflix.spinnaker.config
 
 
-import com.netflix.spectator.api.DefaultRegistry
 import com.netflix.spectator.api.Registry
 import com.netflix.spinnaker.q.Activator
 import com.netflix.spinnaker.q.DeadMessageCallback
@@ -115,10 +114,6 @@ class QueueConfiguration {
     clock: Clock
   ): EventPublisher =
     QueueMetricsPublisher(registry, clock)
-
-  @Bean
-  @ConditionalOnMissingBean
-   fun getRegistry(): Registry = DefaultRegistry();
 
   @Bean
   @ConditionalOnMissingBean(EventPublisher::class)

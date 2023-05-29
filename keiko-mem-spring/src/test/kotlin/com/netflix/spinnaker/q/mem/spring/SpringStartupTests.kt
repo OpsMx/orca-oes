@@ -13,12 +13,19 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+/* import org.springframework.boot.SpringBootConfiguration */
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.context.annotation.ComponentScan
 
-//@ExtendWith(SpringExtension::class)
+
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(
   classes = [QueueConfiguration::class, MemQueueConfiguration::class, TestConfiguration::class],
   webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
+/* @SpringBootConfiguration */
+@EnableAutoConfiguration
+@ComponentScan(basePackages = [ "com.netflix.spinnaker.config", "com.netflix.spinnaker.kork"] )
 internal class SpringStartupTests {
 
   @Autowired
