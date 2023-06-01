@@ -104,7 +104,7 @@ abstract class MonitorableQueueTest<out Q : MonitorableQueue>(
       verify(publisher).publishEvent(isA<MessagePushed>())
     }
 
-    /*it("reports the updated queue depth") {
+    it("reports the updated queue depth") {
       with(queue!!.readState()) {
         softly {
           assertThat(depth).isEqualTo(1)
@@ -113,7 +113,7 @@ abstract class MonitorableQueueTest<out Q : MonitorableQueue>(
           assertThat(orphaned).isEqualTo(0)
         }
       }
-    }*/
+    }
 
     it("reports a matching message exists") {
       with(queue!!) {
