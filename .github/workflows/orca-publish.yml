@@ -23,7 +23,7 @@ jobs:
           cache: 'gradle'
       - name: Build
         env:
-          NEXUS_VERSION: 1-0-SNAPSHOT
+          NEXUS_VERSION: 2-0-SNAPSHOT
         run: |
             
               cat <<EOF>> patch
@@ -65,7 +65,7 @@ jobs:
              
               ls -d */  | grep "orca\|keiko" | sed 's/\///g' > ds.txt
               
-              cat ds.txt
+              # cat ds.txt
               
 
               for i in $(cat ds.txt) 
