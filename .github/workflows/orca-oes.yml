@@ -4,8 +4,8 @@ on:
   workflow_call:
   push:
     branches:
-    - OES-1.30.x
- 
+    - OES-1.30.1
+
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Xmx6g -Xms6g
   CONTAINER_REGISTRY: quay.io/opsmxpublic
@@ -40,7 +40,7 @@ jobs:
       - name: Build
         env:
           ORG_GRADLE_PROJECT_version: ${{ steps.build_variables.outputs.VERSION }}
-        run: ./gradlew --no-daemon -PenableCrossCompilerPlugin=true orca-web:installDist -x test 
+        run: ./gradlew --no-daemon -PenableCrossCompilerPlugin=true orca-web:installDist -x test
 
       - name: dockerBuildpush
         uses: docker/build-push-action@v2
@@ -51,7 +51,7 @@ jobs:
           file: docker/ubi8/Dockerfile-fips
           push: true
           tags: |
-            "${{ env.CONTAINER_REGISTRY }}/${{ steps.build_variables.outputs.REPO }}:${{ steps.build_variables.outputs.VERSION }}" 
+            "${{ env.CONTAINER_REGISTRY }}/${{ steps.build_variables.outputs.REPO }}:${{ steps.build_variables.outputs.VERSION }}"
       - name: dockerBuildpushdev
         uses: docker/build-push-action@v2
         with:
@@ -61,4 +61,4 @@ jobs:
           file: docker/ubi8/Dockerfile-dev
           push: true
           tags: |
-            "${{ env.CONTAINER_REGISTRY }}/${{ steps.build_variables.outputs.REPO }}:${{ steps.build_variables.outputs.VERSION }}-dev"            
+            "${{ env.CONTAINER_REGISTRY }}/${{ steps.build_variables.outputs.REPO }}:${{ steps.build_variables.outputs.VERSION }}-dev"
