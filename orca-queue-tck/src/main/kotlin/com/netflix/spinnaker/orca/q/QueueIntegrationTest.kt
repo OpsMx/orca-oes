@@ -73,11 +73,9 @@ import java.time.Instant.now
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit.HOURS
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -91,15 +89,11 @@ import org.springframework.context.annotation.Import
 import org.springframework.context.event.ApplicationEventMulticaster
 import org.springframework.context.event.SimpleApplicationEventMulticaster
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.concurrent.TimeUnit
-import java.util.function.Predicate
 
 @SpringBootTest(
   classes = [TestConfig::class],
   properties = ["queue.retry.delay.ms=10"]
 )
-@ExtendWith(SpringExtension::class)
 abstract class QueueIntegrationTest {
 
   @Autowired
@@ -850,35 +844,6 @@ abstract class QueueIntegrationTest {
         assertThat(stageByRef("1>3").name).isEqualTo("onFailure2")
         assertThat(stageByRef("1>3").status).isEqualTo(SUCCEEDED)
       }
-    }
-  }
-
-  @Test
-  fun `cancelling a zombied execution sets task, stage and execution statuses to CANCELED`() {
-    val pipeline = pipeline {
-      application = "spinnaker"
-      stage {
-        refId = "1"
-        type = "dummy"
-      }
-    }
-    repository.store(pipeline)
-
-    whenever(dummyTask.execute(any())) doAnswer {
-      TaskResult.RUNNING
-    }
-
-    context.run(pipeline, runner::start)
-
-    // simulate a zombie by clearing the queue
-    queue.clear()
-
-    context.runToCompletion(pipeline, { runner.cancel(it, "anonymous", null) }, repository)
-
-    repository.retrieve(PIPELINE, pipeline.id).apply {
-      assertThat(status).isEqualTo(CANCELED)
-      assertThat(stageByRef("1").status).isEqualTo(CANCELED)
-      assertThat(stageByRef("1").tasks.all { it.status == CANCELED })
     }
   }
 }

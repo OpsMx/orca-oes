@@ -29,7 +29,7 @@ allprojects {
     mavenCentral()
   }
 
-group = "io.spinnaker.orca"
+  group = "io.spinnaker.orca"
 
   tasks.withType(JavaCompile).configureEach {
     javaCompiler = javaToolchains.compilerFor {
@@ -55,23 +55,31 @@ subprojects {
     logger.info("Enabling mavenLocal")
     repositories {
       mavenLocal()
-      maven{
+      maven {
         url "https://nexus.opsmx.net/repository/maven-snapshots/"
         credentials {
-                    username = "NEXUS_USERNAME"
-                    password = "NEXUS_PASSWORD"
-                         }
+          username = "NEXUS_USERNAME"
+          password = "NEXUS_PASSWORD"
+        }
       }
     }
-
   }
 
   if (name != "orca-bom" && name != "orca-api") {
     apply plugin: "java-library"
     apply plugin: "groovy"
     test {
+      testLogging {
+        exceptionFormat = 'full'
+        afterSuite { desc, result ->
+          if (!desc.parent) {
+            println "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+            println "Report file: ${reports.html.entryPoint}"
+          }
+        }
+      }
       useJUnitPlatform {
-        includeEngines "spek2", "junit-vintage", "junit-jupiter"
+        includeEngines "spek2", "junit-jupiter"
       }
     }
     dependencies {
@@ -95,7 +103,6 @@ subprojects {
       testImplementation "org.springframework:spring-test"
       testImplementation "org.hamcrest:hamcrest-core"
       testRuntimeOnly "cglib:cglib-nodep:3.3.0"
-      testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
       testRuntimeOnly "org.objenesis:objenesis"
     }
 

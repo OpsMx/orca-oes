@@ -27,3 +27,9 @@ dependencies {
   testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine")
   testImplementation("io.strikt:strikt-core")
 }
+
+test {
+  useJUnitPlatform {
+    includeEngines "spek", "junit-jupiter"
+  }
+}

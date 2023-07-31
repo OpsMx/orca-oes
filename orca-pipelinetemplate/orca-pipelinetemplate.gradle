@@ -28,7 +28,11 @@ dependencies {
 
   testImplementation("org.slf4j:slf4j-simple")
   testImplementation("org.spockframework:spock-unitils")
-  testImplementation("org.codehaus.groovy:groovy-json")
   testImplementation("org.apache.groovy:groovy:4.0.9")
   testImplementation("io.spinnaker.fiat:fiat-core:$fiatVersion")
+  testImplementation "org.apache.groovy:groovy-json"
+  testImplementation "org.unitils:unitils-core:+"
+}
+test {
+  useJUnitPlatform()
 }

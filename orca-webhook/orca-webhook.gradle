@@ -37,4 +37,8 @@ dependencies {
   implementation("org.springframework.security:spring-security-config")
   implementation("org.springframework.security:spring-security-core")
   implementation("org.springframework.security:spring-security-web")
+  implementation "org.apache.groovy:groovy-json"
+}
+test {
+  useJUnitPlatform()
 }

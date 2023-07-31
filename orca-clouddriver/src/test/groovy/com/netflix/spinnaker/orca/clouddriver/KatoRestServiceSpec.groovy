@@ -24,20 +24,21 @@ import com.netflix.spinnaker.orca.clouddriver.config.CloudDriverConfiguration
 import com.netflix.spinnaker.orca.clouddriver.config.CloudDriverConfigurationProperties
 import com.netflix.spinnaker.orca.jackson.OrcaObjectMapper
 import okhttp3.OkHttpClient
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import retrofit.RequestInterceptor
 import retrofit.client.OkClient
 import spock.lang.Specification
 import spock.lang.Subject
 import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import static java.net.HttpURLConnection.HTTP_ACCEPTED
 import static java.net.HttpURLConnection.HTTP_OK
 import static retrofit.RestAdapter.LogLevel.FULL
 
 class KatoRestServiceSpec extends Specification {
 
-  public WireMockServer wireMockServer = new WireMockServer(0)
+  private WireMockServer wireMockServer
 
   @Subject
   KatoRestService service
@@ -56,10 +57,8 @@ class KatoRestServiceSpec extends Specification {
 
   private static final taskId = "e1jbn3"
 
-  @BeforeAll
+  @BeforeEach
   def setup() {
-    wireMockServer.start()
-    configureFor(wireMockServer.port())
     def cfg = new CloudDriverConfiguration()
     def builder = cfg.clouddriverRetrofitBuilder(
       mapper,
@@ -80,8 +79,8 @@ class KatoRestServiceSpec extends Specification {
     taskStatusService = cfg.cloudDriverTaskStatusService(builder)
   }
 
-  @AfterAll
-  def cleanup() {
+  @AfterEach
+  void cleanup() {
     wireMockServer.stop()
   }
 

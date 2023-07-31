@@ -55,7 +55,6 @@ dependencies {
   testRuntimeOnly("org.postgresql:postgresql")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-  testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
   api "com.jcraft:jsch.agentproxy.connector-factory:0.0.9"
 }
 

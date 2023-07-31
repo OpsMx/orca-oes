@@ -30,4 +30,8 @@ dependencies {
 
   testImplementation(project(":orca-test-kotlin"))
   testImplementation("com.github.tomakehurst:wiremock:3.0.0-beta-7")
+  testImplementation("org.jetbrains.spek:spek-subject-extension:+")
+}
+test {
+  useJUnitPlatform()
 }

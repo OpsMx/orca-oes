@@ -25,4 +25,5 @@ dependencies {
 
   testImplementation(project(":orca-queue-tck"))
   testImplementation("org.springframework.boot:spring-boot-test")
+  testImplementation("org.jetbrains.spek:spek-subject-extension:+")
 }

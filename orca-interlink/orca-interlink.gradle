@@ -33,3 +33,6 @@ dependencies {
   annotationProcessor("org.projectlombok:lombok")
   testImplementation(project(":orca-test"))
 }
+test {
+  useJUnitPlatform()
+}

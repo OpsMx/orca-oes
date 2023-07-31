@@ -33,4 +33,5 @@ dependencies {
   testImplementation("io.spinnaker.kork:kork-jedis-test")
 
   testImplementation("io.spinnaker.kork:kork-core")
+  testImplementation("org.jetbrains.spek:spek-subject-extension:+")
 }

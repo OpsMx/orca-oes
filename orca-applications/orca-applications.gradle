@@ -30,3 +30,6 @@ dependencies {
 
   testImplementation(project(":orca-test-groovy"))
 }
+test {
+  useJUnitPlatform()
+}

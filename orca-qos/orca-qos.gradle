@@ -26,4 +26,5 @@ dependencies {
   implementation("net.logstash.logback:logstash-logback-encoder:+")
 
   testImplementation(project(":orca-test-kotlin"))
+  testImplementation("org.jetbrains.spek:spek-subject-extension:+")
 }

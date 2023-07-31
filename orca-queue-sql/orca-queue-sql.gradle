@@ -26,4 +26,5 @@ dependencies {
   testImplementation("org.springframework.boot:spring-boot-test")
 
   testRuntimeOnly("mysql:mysql-connector-java")
+  testImplementation("org.jetbrains.spek:spek-subject-extension:+")
 }

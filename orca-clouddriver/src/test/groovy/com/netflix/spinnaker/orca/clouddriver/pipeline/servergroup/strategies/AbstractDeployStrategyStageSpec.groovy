@@ -24,7 +24,7 @@ import com.netflix.spinnaker.orca.pipeline.model.StageExecutionImpl
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import static com.netflix.spinnaker.orca.api.pipeline.graph.TaskNode.task
+import com.netflix.spinnaker.orca.api.pipeline.graph.TaskNode
 
 @Unroll
 class AbstractDeployStrategyStageSpec extends Specification {
@@ -42,9 +42,9 @@ class AbstractDeployStrategyStageSpec extends Specification {
   def "should compose list of steps"() {
     given:
     // Step mocks
-    def determineSourceServerGroupTask = task("determineSourceServerGroup", DetermineSourceServerGroupTask)
-    def determineHealthProvidersTask = task("determineHealthProviders", DetermineHealthProvidersTask)
-    def basicTask = task("basic", Task)
+    def determineSourceServerGroupTask = TaskNode.task("determineSourceServerGroup", DetermineSourceServerGroupTask)
+    def determineHealthProvidersTask = TaskNode.task("determineHealthProviders", DetermineHealthProvidersTask)
+    def basicTask = TaskNode.task("basic", Task)
 
     AbstractDeployStrategyStage testStage = Spy(AbstractDeployStrategyStage)
     testStage.strategies = [noStrat, aStrat, bStrat, cStrat].asList()

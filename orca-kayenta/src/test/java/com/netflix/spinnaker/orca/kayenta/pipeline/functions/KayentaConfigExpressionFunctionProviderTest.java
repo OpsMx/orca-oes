@@ -1,7 +1,5 @@
 package com.netflix.spinnaker.orca.kayenta.pipeline.functions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Lists;
@@ -10,6 +8,7 @@ import com.netflix.spinnaker.orca.kayenta.KayentaCanaryConfig;
 import com.netflix.spinnaker.orca.kayenta.KayentaService;
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -19,16 +18,24 @@ public class KayentaConfigExpressionFunctionProviderTest {
   public void missingName() {
     KayentaConfigExpressionFunctionProvider provider =
         new KayentaConfigExpressionFunctionProvider(Mockito.mock(KayentaService.class));
-    assertThrows(
-        SpelHelperFunctionException.class, () -> provider.canaryConfigNameToId(null, "myapp"));
+
+    Assertions.assertThrows(
+        SpelHelperFunctionException.class,
+        () -> {
+          provider.canaryConfigNameToId(null, "myapp");
+        });
   }
 
   @Test
   public void missingApp() {
     KayentaConfigExpressionFunctionProvider provider =
         new KayentaConfigExpressionFunctionProvider(Mockito.mock(KayentaService.class));
-    assertThrows(
-        SpelHelperFunctionException.class, () -> provider.canaryConfigNameToId("myname", null));
+
+    Assertions.assertThrows(
+        SpelHelperFunctionException.class,
+        () -> {
+          provider.canaryConfigNameToId("myname", null);
+        });
   }
 
   @Test
@@ -44,7 +51,7 @@ public class KayentaConfigExpressionFunctionProviderTest {
         new KayentaConfigExpressionFunctionProvider(kayentaService);
     String configId = provider.canaryConfigNameToId("myname", "myapp");
 
-    assertEquals("myconfig", configId);
+    Assertions.assertEquals("myconfig", configId);
   }
 
   @Test
@@ -58,8 +65,11 @@ public class KayentaConfigExpressionFunctionProviderTest {
 
     KayentaConfigExpressionFunctionProvider provider =
         new KayentaConfigExpressionFunctionProvider(kayentaService);
-    assertThrows(
+
+    Assertions.assertThrows(
         SpelHelperFunctionException.class,
-        () -> provider.canaryConfigNameToId("someothername", "myapp"));
+        () -> {
+          provider.canaryConfigNameToId("someothername", "myapp");
+        });
   }
 }

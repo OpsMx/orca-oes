@@ -26,3 +26,6 @@ dependencies {
   implementation("io.vavr:vavr:1.0.0-alpha-4")
   testImplementation(project(":orca-test-groovy"))
 }
+test {
+  useJUnitPlatform()
+}

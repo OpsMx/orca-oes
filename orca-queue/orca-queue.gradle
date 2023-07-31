@@ -43,4 +43,5 @@ dependencies {
   testImplementation(project(":orca-echo"))
   testImplementation("org.apache.groovy:groovy:4.0.9")
   testImplementation("org.assertj:assertj-core")
+  testImplementation("org.jetbrains.spek:spek-subject-extension:+")
 }
