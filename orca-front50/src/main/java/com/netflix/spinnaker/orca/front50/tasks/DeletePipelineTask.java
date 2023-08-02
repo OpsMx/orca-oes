@@ -99,8 +99,8 @@ public class DeletePipelineTask implements CloudProviderAware, RetryableTask {
         .forEach(m -> m.mutate(pipeline));
 
     Response response =
-        front50Service.deletePipelineConfig(
-            pipeline.get("application").toString(), pipeline.get("name").toString(), staleCheck);
+        front50Service.deletePipeline(
+            pipeline.get("application").toString(), pipeline.get("name").toString());
 
     Map<String, Object> outputs = new HashMap<>();
     outputs.put("notification.type", "deletepipeline");
