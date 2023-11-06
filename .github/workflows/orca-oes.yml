@@ -55,6 +55,9 @@ jobs:
           context: .
           build-args: |
             CUSTOMPLUGIN_RELEASEVERSION=v4.0.4-rc1
+            CUSTOMPLUGIN_RELEASEORG=opsmx
+            CUSTOMPLUGIN_RELEASEREPO=armory-observability-plugin
+            CUSTOMPLUGIN_RELEASEVERSION=v1.0.1
           file: docker/ubi8/Dockerfile-fips
           push: true
           tags: |
@@ -65,6 +68,9 @@ jobs:
           context: .
           build-args: |
             CUSTOMPLUGIN_RELEASEVERSION=v4.0.4-rc1
+            CUSTOMPLUGIN_RELEASEORG=opsmx
+            CUSTOMPLUGIN_RELEASEREPO=armory-observability-plugin
+            CUSTOMPLUGIN_RELEASEVERSION=v1.0.1
           file: docker/ubi8/Dockerfile-dev
           push: true
           tags: |
