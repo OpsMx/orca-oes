@@ -590,7 +590,7 @@ class ArtifactUtilsSpec extends Specification {
         expectedArtifacts: [expectedArtifact],
     ]
 
-    def artifactUtils = makeArtifactUtilsWithMock(executionRepositoryMock)
+    def artifactUtils = makeArtifactUtilsWithStub(executionRepositoryMock)
 
     when:
     artifactUtils.resolveArtifacts(pipeline)
