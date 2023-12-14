@@ -41,7 +41,7 @@ class ArtifactUtilsSpec extends Specification {
     return criteria
   }()
 
-  def executionRepository = Stub(ExecutionRepository) {
+  def executionRepository = Mock(ExecutionRepository) {
     // only a call to retrievePipelinesForPipelineConfigId() with these argument values is expected
     retrievePipelinesForPipelineConfigId(pipelineId, expectedExecutionCriteria) >> Observable.empty()
     // any other interaction is unexpected
@@ -49,11 +49,11 @@ class ArtifactUtilsSpec extends Specification {
   }
 
   def makeArtifactUtils() {
-    return makeArtifactUtilsWithStub(executionRepository)
+    return makeArtifactUtilsWithMock(executionRepository)
   }
 
-  def makeArtifactUtilsWithStub(ExecutionRepository executionRepositoryStub) {
-    return new ArtifactUtils(new ObjectMapper(), executionRepositoryStub,
+  def makeArtifactUtilsWithMock(ExecutionRepository executionRepositoryMock) {
+    return new ArtifactUtils(new ObjectMapper(), executionRepositoryMock,
       new ContextParameterProcessor())
   }
 
@@ -111,7 +111,7 @@ class ArtifactUtilsSpec extends Specification {
 
     then:
     def artifacts = artifactUtils.getArtifacts(desired)
-    artifacts.size == 3
+    artifacts.size() == 3
     artifacts.find { it.type == "1" } != null
     artifacts.find { it.type == "2" } != null
     artifacts.find { it.type == "extra" } != null
@@ -145,7 +145,7 @@ class ArtifactUtilsSpec extends Specification {
 
     then:
     def artifacts = artifactUtils.getArtifacts(desired)
-    artifacts.size == 1
+    artifacts.size() == 1
     artifacts.find { it.type == "1" } != null
 
     where:
@@ -191,7 +191,7 @@ class ArtifactUtilsSpec extends Specification {
 
     then:
     def artifacts = artifactUtils.getArtifacts(desired)
-    artifacts.size == 2
+    artifacts.size() == 2
     artifacts.find { it.type == "1" } != null
     artifacts.find { it.type == "trigger" } != null
   }
@@ -215,7 +215,7 @@ class ArtifactUtilsSpec extends Specification {
 
     then:
     def artifacts = artifactUtils.getArtifacts(desired)
-    artifacts.size == 0
+    artifacts.size() == 0
   }
 
   def "should find a bound artifact from upstream stages"() {
@@ -304,7 +304,7 @@ class ArtifactUtilsSpec extends Specification {
 
     then:
     def artifacts = artifactUtils.getAllArtifacts(execution)
-    artifacts.size == 3
+    artifacts.size() == 3
     artifacts*.type == ["2", "1", "trigger"]
   }
 
@@ -335,7 +335,7 @@ class ArtifactUtilsSpec extends Specification {
     def executionTerminalCriteria = new ExecutionRepository.ExecutionCriteria()
     executionTerminalCriteria.setStatuses(ExecutionStatus.TERMINAL)
 
-    def executionRepositoryStub = Stub(ExecutionRepository) {
+    def executionRepositoryMock = Mock(ExecutionRepository) {
       // only a call to retrievePipelinesForPipelineConfigId() with these argument values is expected
       retrievePipelinesForPipelineConfigId(pipelineId, executionCriteria) >> Observable.just(execution)
       retrievePipelinesForPipelineConfigId(pipelineId, executionTerminalCriteria) >> Observable.empty()
@@ -343,11 +343,11 @@ class ArtifactUtilsSpec extends Specification {
       0 * _
     }
 
-    def artifactUtils = makeArtifactUtilsWithStub(executionRepositoryStub)
+    def artifactUtils = makeArtifactUtilsWithMock(executionRepositoryMock)
 
     then:
     def artifacts = artifactUtils.getArtifactsForPipelineId(pipelineId, executionCriteria)
-    artifacts.size == 3
+    artifacts.size() == 3
     artifacts*.type == ["2", "1", "trigger"]
 
     def emptyArtifacts = artifactUtils.getArtifactsForPipelineId(pipelineId, executionTerminalCriteria)
@@ -374,18 +374,18 @@ class ArtifactUtilsSpec extends Specification {
     }
     execution.trigger = new DefaultTrigger("webhook", null, "user", [:], [Artifact.builder().type("trigger").build()])
 
-    def executionRepositoryStub = Stub(ExecutionRepository) {
+    def executionRepositoryMock = Mock(ExecutionRepository) {
       // only a call to retrievePipelinesForPipelineConfigId() with these argument values is expected
       retrievePipelinesForPipelineConfigId(pipelineId, expectedExecutionCriteria) >> Observable.just(execution)
       // any other interaction is unexpected
       0 * _
     }
 
-    def artifactUtils = makeArtifactUtilsWithStub(executionRepositoryStub)
+    def artifactUtils = makeArtifactUtilsWithMock(executionRepositoryMock)
 
     then:
     def artifacts = artifactUtils.getArtifactsForPipelineIdWithoutStageRef(pipelineId, "2", expectedExecutionCriteria)
-    artifacts.size == 2
+    artifacts.size() == 2
     artifacts*.type == ["1", "trigger"]
   }
 
