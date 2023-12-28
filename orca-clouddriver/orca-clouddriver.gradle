@@ -26,7 +26,10 @@ dependencies {
   implementation(project(":orca-deploymentmonitor"))
   implementation("io.spinnaker.kork:kork-moniker")
   implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
-  implementation("io.kubernetes:client-java")
+  implementation ('io.kubernetes:client-java') {
+    exclude group: "org.bitbucket.b_c", module: "jose4j:0.9.2"
+  }
+  implementation("org.bitbucket.b_c:jose4j:0.9.4")
   implementation("javax.validation:validation-api:+")
   implementation("com.netflix.frigga:frigga:+")
   implementation("org.jetbrains:annotations")
