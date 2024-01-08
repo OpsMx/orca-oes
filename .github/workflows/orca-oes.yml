@@ -2,6 +2,7 @@ name: Branch Build orca
 
 on:
   workflow_call:
+  workflow_dispatch:        
   push:
     branches:
     - OES-1.30.1
