@@ -2,10 +2,11 @@ name: Branch Build orca
 
 on:
   workflow_call:
+  workflow_dispatch:        
   push:
     branches:
-    - rca20231107
-    
+    - OES-1.30.1
+
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Xmx6g -Xms6g
   CONTAINER_REGISTRY: quay.io/opsmxpublic
