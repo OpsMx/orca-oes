@@ -20,10 +20,9 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-          cache: 'gradle'
       - name: Build
         env:
-          NEXUS_VERSION: 1-0-SNAPSHOT
+          NEXUS_VERSION: 2-0-SNAPSHOT
         run: |
             
               cat <<EOF>> patch
