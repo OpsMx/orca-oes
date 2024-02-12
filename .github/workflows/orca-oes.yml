@@ -5,7 +5,7 @@ on:
   workflow_dispatch:        
   push:
     branches:
-    - OES-1.30.1
+    - OES-1.30.1-nov-cve
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Xmx6g -Xms6g
@@ -47,6 +47,10 @@ jobs:
           sed  -e 's/NEXUS_PASSWORD/${{ secrets.NEXUS_PASSWORD }}/' -i settings.gradle
           sed  -e 's/NEXUS_USERNAME/${{ secrets.NEXUS_USERNAME }}/' -i build.gradle
           sed  -e 's/NEXUS_PASSWORD/${{ secrets.NEXUS_PASSWORD }}/' -i build.gradle
+
+          sed  's/^korkVersion=.*/korkVersion=OES-1.30.1-nov-cve-SNAPSHOT/; s/^fiatVersion=.*/fiatVersion=OES-1.30.1-nov-cve-SNAPSHOT/' gradle.properties > gradle.properties-bkp
+
+                  mv gradle.properties-bkp gradle.properties
           
            ./gradlew --no-daemon -PenableCrossCompilerPlugin=true orca-web:installDist -x test
 
