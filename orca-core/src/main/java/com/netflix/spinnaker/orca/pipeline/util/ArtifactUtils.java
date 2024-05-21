@@ -52,6 +52,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import rx.schedulers.Schedulers;
 
@@ -64,6 +65,11 @@ public class ArtifactUtils {
   private final ObjectMapper objectMapper;
   private final ExecutionRepository executionRepository;
   private final ContextParameterProcessor contextParameterProcessor;
+
+  // This workaround allows customers to keep their existing pipelines unchanged in OES-1.30.
+  // Do not migrate this flag to newer versions.
+  @Value("${trigger.expected-artifacts-legacy-behavior:true}")
+  private boolean filterExpectedArtifactsForTriggers;
 
   @Autowired
   public ArtifactUtils(
@@ -212,7 +218,8 @@ public class ArtifactUtils {
             .map(it -> objectMapper.convertValue(it, ExpectedArtifact.class))
             .filter(
                 artifact ->
-                    expectedArtifactIds.contains(artifact.getId())
+                    filterExpectedArtifactsForTriggers
+                        || expectedArtifactIds.contains(artifact.getId())
                         || artifact.isUseDefaultArtifact()
                         || artifact.isUsePriorArtifact())
             .collect(toImmutableList());
