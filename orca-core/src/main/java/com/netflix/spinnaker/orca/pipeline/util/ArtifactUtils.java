@@ -28,7 +28,6 @@ import com.google.common.collect.ImmutableSet;
 import com.netflix.spinnaker.kork.annotations.NonnullByDefault;
 import com.netflix.spinnaker.kork.artifacts.model.Artifact;
 import com.netflix.spinnaker.kork.artifacts.model.ExpectedArtifact;
-import com.netflix.spinnaker.kork.web.exceptions.InvalidRequestException;
 import com.netflix.spinnaker.orca.api.pipeline.models.PipelineExecution;
 import com.netflix.spinnaker.orca.api.pipeline.models.StageExecution;
 import com.netflix.spinnaker.orca.pipeline.model.StageContext;
@@ -49,11 +48,11 @@ import java.util.stream.Stream;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import rx.schedulers.Schedulers;
 
@@ -66,6 +65,11 @@ public class ArtifactUtils {
   private final ObjectMapper objectMapper;
   private final ExecutionRepository executionRepository;
   private final ContextParameterProcessor contextParameterProcessor;
+
+  // This workaround allows customers to keep their existing pipelines unchanged in OES-1.30.
+  // Do not migrate this flag to newer versions.
+  @Value("${trigger.expected-artifacts-legacy-behavior:true}")
+  private boolean filterExpectedArtifactsForTriggers;
 
   @Autowired
   public ArtifactUtils(
@@ -141,31 +145,7 @@ public class ArtifactUtils {
         contextParameterProcessor.process(
             boundArtifactMap, contextParameterProcessor.buildExecutionContext(stage), true);
 
-    Artifact evaluatedArtifact =
-        objectMapper.convertValue(evaluatedBoundArtifactMap, Artifact.class);
-    return getBoundInlineArtifact(evaluatedArtifact, stage.getExecution())
-        .orElse(evaluatedArtifact);
-  }
-
-  private Optional<Artifact> getBoundInlineArtifact(
-      @Nullable Artifact artifact, PipelineExecution execution) {
-    if (ObjectUtils.anyNull(
-        artifact, execution.getTrigger(), execution.getTrigger().getArtifacts())) {
-      return Optional.empty();
-    }
-    try {
-      ExpectedArtifact expectedArtifact =
-          ExpectedArtifact.builder().matchArtifact(artifact).build();
-      return ArtifactResolver.getInstance(execution.getTrigger().getArtifacts(), true)
-          .resolveExpectedArtifacts(List.of(expectedArtifact))
-          .getResolvedExpectedArtifacts()
-          .stream()
-          .findFirst()
-          .flatMap(this::getBoundArtifact);
-    } catch (InvalidRequestException e) {
-      log.debug("Could not match inline artifact with trigger bound artifacts", e);
-      return Optional.empty();
-    }
+    return objectMapper.convertValue(evaluatedBoundArtifactMap, Artifact.class);
   }
 
   public @Nullable Artifact getBoundArtifactForId(StageExecution stage, @Nullable String id) {
@@ -238,7 +218,8 @@ public class ArtifactUtils {
             .map(it -> objectMapper.convertValue(it, ExpectedArtifact.class))
             .filter(
                 artifact ->
-                    expectedArtifactIds.contains(artifact.getId())
+                    filterExpectedArtifactsForTriggers
+                        || expectedArtifactIds.contains(artifact.getId())
                         || artifact.isUseDefaultArtifact()
                         || artifact.isUsePriorArtifact())
             .collect(toImmutableList());
