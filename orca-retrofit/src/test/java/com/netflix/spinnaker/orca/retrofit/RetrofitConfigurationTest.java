@@ -22,7 +22,6 @@ import static org.mockito.Mockito.mock;
 
 import com.netflix.spectator.api.NoopRegistry;
 import com.netflix.spinnaker.config.OkHttpClientComponents;
-import com.netflix.spinnaker.orca.config.OrcaConfiguration;
 import com.netflix.spinnaker.orca.exceptions.DefaultExceptionHandler;
 import com.netflix.spinnaker.orca.exceptions.ExceptionHandler;
 import com.netflix.spinnaker.orca.pipeline.ExecutionRunner;
@@ -32,12 +31,15 @@ import com.netflix.spinnaker.orca.retrofit.exceptions.SpinnakerServerExceptionHa
 import java.util.List;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.context.annotation.UserConfigurations;
 import org.springframework.boot.task.TaskExecutorBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
 class RetrofitConfigurationTest {
 
   private final ApplicationContextRunner runner =
@@ -47,7 +49,6 @@ class RetrofitConfigurationTest {
           .withAllowBeanDefinitionOverriding(true)
           .withConfiguration(
               UserConfigurations.of(
-                  OrcaConfiguration.class,
                   RetrofitConfiguration.class,
                   OkHttpClientComponents.class,
                   TestDependencyConfiguration.class));
@@ -110,6 +111,11 @@ class RetrofitConfigurationTest {
     @Bean
     ExecutionRepository executionRepository() {
       return mock(ExecutionRepository.class);
+    }
+
+    @Bean
+    public DefaultExceptionHandler defaultExceptionHandler() {
+      return new DefaultExceptionHandler();
     }
 
     @Bean

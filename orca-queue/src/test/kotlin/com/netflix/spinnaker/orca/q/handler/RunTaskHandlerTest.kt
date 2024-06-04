@@ -30,6 +30,7 @@ import com.netflix.spinnaker.orca.api.pipeline.models.StageExecution
 import com.netflix.spinnaker.orca.api.test.pipeline
 import com.netflix.spinnaker.orca.api.test.stage
 import com.netflix.spinnaker.orca.api.test.task
+import com.netflix.spinnaker.orca.echo.pipeline.ManualJudgmentStage
 import com.netflix.spinnaker.orca.exceptions.ExceptionHandler
 import com.netflix.spinnaker.orca.lock.RetriableLock
 import com.netflix.spinnaker.orca.pipeline.DefaultStageDefinitionBuilderFactory
@@ -65,7 +66,6 @@ object RunTaskHandlerTest : SubjectSpek<RunTaskHandler>({
 
   val queue: Queue = mock()
   val repository: ExecutionRepository = mock()
-  val stageNavigator: StageNavigator = mock()
   val task: DummyTask = mock {
     on { extensionClass } doReturn DummyTask::class.java
     on { aliases() } doReturn emptyList<String>()
@@ -87,7 +87,9 @@ object RunTaskHandlerTest : SubjectSpek<RunTaskHandler>({
   val dynamicConfigService: DynamicConfigService = mock()
   val retriableLock: RetriableLock = mock()
   val taskExecutionInterceptors: List<TaskExecutionInterceptor> = listOf(mock())
-  val stageResolver = DefaultStageResolver(StageDefinitionBuildersProvider(emptyList()))
+  val stageResolver : DefaultStageResolver = mock()
+  val manualJudgmentStage : ManualJudgmentStage = ManualJudgmentStage()
+  val stageNavigator: StageNavigator = mock()
 
   subject(GROUP) {
     whenever(dynamicConfigService.getConfig(eq(Int::class.java), eq("tasks.warningInvocationTimeMs"), any())) doReturn 0
@@ -576,17 +578,10 @@ object RunTaskHandlerTest : SubjectSpek<RunTaskHandler>({
             )
           }
 
-          it("attaches the exception to the stage context") {
+          it("attaches the exception to the stageContext and taskExceptionDetails") {
             verify(repository).storeStage(
               check {
                 assertThat(it.context["exception"]).isEqualTo(exceptionDetails)
-              }
-            )
-          }
-
-          it("attaches the exception to the taskExceptionDetails") {
-            verify(repository).storeStage(
-              check {
                 assertThat(it.tasks[0].taskExceptionDetails["exception"]).isEqualTo(exceptionDetails)
               }
             )

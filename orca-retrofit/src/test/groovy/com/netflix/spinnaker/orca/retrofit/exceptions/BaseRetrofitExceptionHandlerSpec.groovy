@@ -16,6 +16,7 @@
 
 package com.netflix.spinnaker.orca.retrofit.exceptions
 
+import com.netflix.spinnaker.orca.exceptions.ExceptionHandler
 import retrofit.RestAdapter
 import retrofit.RetrofitError
 import retrofit.client.Client
@@ -44,7 +45,7 @@ class BaseRetrofitExceptionHandlerSpec extends Specification {
         responseCode = e.response?.status
       }
       boolean retry = shouldRetry(e, kind, responseCode)
-      new Response(e.class.simpleName, taskName, responseDetails("test"), retry)
+      new Response(e.class.simpleName, taskName, ExceptionHandler.responseDetails("test"), retry)
     }
   }
 

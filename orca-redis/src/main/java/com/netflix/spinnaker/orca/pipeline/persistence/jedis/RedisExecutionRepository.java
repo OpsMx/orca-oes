@@ -1151,8 +1151,8 @@ public class RedisExecutionRepository implements ExecutionRepository {
       Long buildTimeStartBoundary,
       Long buildTimeEndBoundary) {
     String executionsKey = executionsByPipelineKey(pipelineConfigId);
-    Set<String> executionIds =
-        (Set<String>)
+    List<String> executionIds =
+        (List<String>)
             delegate.withCommandsClient(
                 c -> {
                   return c.zrangeByScore(

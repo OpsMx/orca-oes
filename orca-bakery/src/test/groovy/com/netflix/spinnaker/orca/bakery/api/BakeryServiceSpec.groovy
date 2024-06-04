@@ -20,6 +20,8 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.netflix.spinnaker.kork.retrofit.exceptions.SpinnakerHttpException
 import com.netflix.spinnaker.orca.bakery.config.BakeryConfiguration
 import com.netflix.spinnaker.orca.jackson.OrcaObjectMapper
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import retrofit.RequestInterceptor
 import retrofit.RetrofitError
 import retrofit.client.OkClient
@@ -32,7 +34,7 @@ import static retrofit.RestAdapter.LogLevel.FULL
 
 class BakeryServiceSpec extends Specification {
 
-  static WireMockServer wireMockServer = new WireMockServer(0)
+  private WireMockServer wireMockServer
 
   @Subject BakeryService bakery
 
@@ -43,28 +45,30 @@ class BakeryServiceSpec extends Specification {
   private static final bakeId = "b-123456789"
   private static final statusId = "s-123456789"
 
-  static String bakeURI
-  static String statusURI
+  String bakeURI
+  String statusURI
 
   def mapper = OrcaObjectMapper.newInstance()
 
-  def setupSpec() {
+  @BeforeEach
+  void setup() {
+    wireMockServer = new WireMockServer()
     wireMockServer.start()
-    configureFor(wireMockServer.port())
-    bakeURI = wireMockServer.url(bakePath)
-    statusURI = wireMockServer.url(statusPath)
-  }
+    configureFor("localhost", wireMockServer.port())
 
-  def setup() {
+    bakeURI = "http://localhost:" + wireMockServer.port() + bakePath
+    statusURI = "http://localhost:" + wireMockServer.port() + statusPath
+
     bakery = new BakeryConfiguration(
-      retrofitClient: new OkClient(),
-      retrofitLogLevel: FULL,
-      spinnakerRequestInterceptor: Mock(RequestInterceptor)
+        retrofitClient: new OkClient(),
+        retrofitLogLevel: FULL,
+        spinnakerRequestInterceptor: Mock(RequestInterceptor)
     )
-      .buildService(wireMockServer.url("/"))
+        .buildService(wireMockServer.url("/"))
   }
 
-  def cleanupSpec() {
+  @AfterEach
+  void cleanup() {
     wireMockServer.stop()
   }
 
@@ -107,7 +111,6 @@ class BakeryServiceSpec extends Specification {
         .willReturn(
         aResponse()
           .withStatus(HTTP_NOT_FOUND)
-          .withBody("{\"message\": \"error\"}")
       )
     )
 

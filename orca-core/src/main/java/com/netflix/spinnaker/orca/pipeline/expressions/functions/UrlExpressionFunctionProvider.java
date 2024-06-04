@@ -162,6 +162,21 @@ public class UrlExpressionFunctionProvider implements ExpressionFunctionProvider
     }
   }
 
+  public static Object readTestYaml(String text) {
+    try {
+      List<Object> yamlDocs = new ArrayList<>();
+      LoaderOptions loaderOptions = new LoaderOptions();
+      loaderOptions.setTagInspector(tag -> true);
+      Iterable<Object> iterable = new Yaml(new SafeConstructor(loaderOptions)).loadAll(text);
+      for (Object o : iterable) {
+        yamlDocs.add(o);
+      }
+      return yamlDocs;
+    } catch (Exception e) {
+      throw new SpelHelperFunctionException(format("#readAllYaml(%s) failed", text), e);
+    }
+  }
+
   /**
    * Reads a properties file stored at a url
    *

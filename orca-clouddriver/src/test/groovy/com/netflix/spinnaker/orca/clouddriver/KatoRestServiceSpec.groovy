@@ -27,11 +27,9 @@ import okhttp3.OkHttpClient
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import retrofit.RequestInterceptor
-import retrofit.client.OkClient
 import spock.lang.Specification
 import spock.lang.Subject
 import static com.github.tomakehurst.wiremock.client.WireMock.*
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import static java.net.HttpURLConnection.HTTP_ACCEPTED
 import static java.net.HttpURLConnection.HTTP_OK
 import static retrofit.RestAdapter.LogLevel.FULL
@@ -59,6 +57,8 @@ class KatoRestServiceSpec extends Specification {
 
   @BeforeEach
   def setup() {
+    wireMockServer = new WireMockServer()
+    wireMockServer.start()
     def cfg = new CloudDriverConfiguration()
     def builder = cfg.clouddriverRetrofitBuilder(
       mapper,
