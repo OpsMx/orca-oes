@@ -17,12 +17,6 @@
 apply from: "$rootDir/gradle/groovy.gradle"
 apply from: "$rootDir/gradle/kotlin.gradle"
 
-test {
-  useJUnitPlatform {
-    includeEngines "junit-vintage", "junit-jupiter"
-  }
-}
-
 dependencies {
   implementation(project(":orca-core"))
   implementation(project(":orca-retrofit"))
@@ -70,7 +64,7 @@ dependencies {
   testCompileOnly("org.projectlombok:lombok")
   testAnnotationProcessor("org.projectlombok:lombok")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-api")
-  testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
 sourceSets {
@@ -78,4 +72,7 @@ sourceSets {
     java { srcDirs = [] }    // no source dirs for the java compiler
     groovy { srcDirs = ["src/main/java", "src/main/groovy"] }  // compile   everything in src/ with groovy
   }
+}
+test {
+  useJUnitPlatform()
 }

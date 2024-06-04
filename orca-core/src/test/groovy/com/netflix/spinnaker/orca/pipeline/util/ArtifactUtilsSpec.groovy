@@ -73,9 +73,9 @@ class ArtifactUtilsSpec extends Specification {
 
     when:
     def artifact = makeArtifactUtils().getBoundArtifactForStage(execution.stages[0], null, Artifact.builder()
-      .type('http/file')
-      .name('build/libs/my-jar-${trigger[\'buildNumber\']}.jar')
-      .build())
+        .type('http/file')
+        .name('build/libs/my-jar-${trigger[\'buildNumber\']}.jar')
+        .build())
 
     then:
     artifact.name == 'build/libs/my-jar-100.jar'
@@ -203,8 +203,8 @@ class ArtifactUtilsSpec extends Specification {
         type = "stage1"
         refId = "1"
         outputs.resolvedExpectedArtifacts = [
-          ExpectedArtifact.builder().id("1").boundArtifact(Artifact.builder().type("correct").build()).build(),
-          ExpectedArtifact.builder().id("2").boundArtifact(Artifact.builder().type("incorrect").build()).build()
+            ExpectedArtifact.builder().id("1").boundArtifact(Artifact.builder().type("correct").build()).build(),
+            ExpectedArtifact.builder().id("2").boundArtifact(Artifact.builder().type("incorrect").build()).build()
         ]
       }
       stage {
@@ -236,7 +236,7 @@ class ArtifactUtilsSpec extends Specification {
         type = "stage1"
         refId = "1"
         outputs.resolvedExpectedArtifacts = [
-          ExpectedArtifact.builder().id("2").boundArtifact(incorrectArtifact).build()
+            ExpectedArtifact.builder().id("2").boundArtifact(incorrectArtifact).build()
         ]
       }
       stage {
@@ -372,18 +372,18 @@ class ArtifactUtilsSpec extends Specification {
     def expectedArtifact = ExpectedArtifact.builder().id("543ef192-82a2-4805-8d0c-827f2f976a1c").matchArtifact(matchArtifact).build()
     def receivedArtifact = Artifact.builder().name("my-artifact").type("docker/image").build()
     def pipeline = [
-      id: "abc",
-      trigger: ["expectedArtifactIds": ["543ef192-82a2-4805-8d0c-827f2f976a1c"]],
-      expectedArtifacts: [expectedArtifact],
-      receivedArtifacts: [receivedArtifact],
+        id: "abc",
+        trigger: ["expectedArtifactIds": ["543ef192-82a2-4805-8d0c-827f2f976a1c"]],
+        expectedArtifacts: [expectedArtifact],
+        receivedArtifacts: [receivedArtifact],
     ]
     def artifactUtils = makeArtifactUtils()
 
     when:
     artifactUtils.resolveArtifacts(pipeline)
     List<ExpectedArtifact> resolvedArtifacts = objectMapper.convertValue(
-      pipeline.trigger.resolvedExpectedArtifacts,
-      new TypeReference<List<ExpectedArtifact>>() {})
+        pipeline.trigger.resolvedExpectedArtifacts,
+        new TypeReference<List<ExpectedArtifact>>() {})
 
     then:
     resolvedArtifacts.size() == 1
@@ -447,12 +447,12 @@ class ArtifactUtilsSpec extends Specification {
     def triggerArtifact = Artifact.builder().name("my-trigger-artifact").type("docker/image").build()
     def bothArtifact = Artifact.builder().name("my-both-artifact").type("docker/image").build()
     def pipeline = [
-      id: "abc",
-      trigger: [
-          artifacts: [triggerArtifact, bothArtifact]
-      ],
-      expectedArtifacts: [expectedArtifact],
-      receivedArtifacts: [receivedArtifact, bothArtifact],
+        id: "abc",
+        trigger: [
+            artifacts: [triggerArtifact, bothArtifact]
+        ],
+        expectedArtifacts: [expectedArtifact],
+        receivedArtifacts: [receivedArtifact, bothArtifact],
     ]
     def artifactUtils = makeArtifactUtils()
 
@@ -473,12 +473,12 @@ class ArtifactUtilsSpec extends Specification {
     def triggerArtifact = Artifact.builder().name("my-trigger-artifact").type("docker/image").build()
     def bothArtifact = Artifact.builder().name("my-both-artifact").type("docker/image").build()
     def pipeline = [
-      id: "abc",
-      trigger: [
-        artifacts: [triggerArtifact, bothArtifact]
-      ],
-      expectedArtifacts: [expectedArtifact],
-      receivedArtifacts: [receivedArtifact, bothArtifact],
+        id: "abc",
+        trigger: [
+            artifacts: [triggerArtifact, bothArtifact]
+        ],
+        expectedArtifacts: [expectedArtifact],
+        receivedArtifacts: [receivedArtifact, bothArtifact],
     ]
     def artifactUtils = makeArtifactUtils()
 

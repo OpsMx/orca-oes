@@ -59,7 +59,6 @@ subprojects {
     apply plugin: "groovy"
     test {
       testLogging {
-        showStandardStreams = true
         exceptionFormat = 'full'
         afterSuite { desc, result ->
           if (!desc.parent) {

@@ -23,7 +23,6 @@ import com.netflix.spinnaker.orca.jackson.OrcaObjectMapper
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import retrofit.RequestInterceptor
-import retrofit.RetrofitError
 import retrofit.client.OkClient
 import spock.lang.Specification
 import spock.lang.Subject

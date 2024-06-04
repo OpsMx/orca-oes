@@ -79,8 +79,8 @@ class CompleteExecutionHandler(
               .topLevelStages
               .filter { it.status == RUNNING }
               .forEach {
-              queue.push(CancelStage(it))
-            }
+                queue.push(CancelStage(it))
+              }
           }
         }
       }
@@ -90,7 +90,7 @@ class CompleteExecutionHandler(
           queue.push(StartWaitingExecutions(it, purgeQueue = !execution.isKeepWaitingPipelines))
         }
       } else {
-          log.debug("Not starting waiting executions as execution ${execution.id} is currently RUNNING.")
+        log.debug("Not starting waiting executions as execution ${execution.id} is currently RUNNING.")
       }
     }
   }

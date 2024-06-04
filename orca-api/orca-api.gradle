@@ -44,7 +44,6 @@ dependencies {
   annotationProcessor("org.projectlombok:lombok")
 
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-api")
-  testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 
   dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.4.32")
 
@@ -60,7 +59,5 @@ tasks.withType(JavaCompile) {
 }
 
 test {
-  useJUnitPlatform {
-    includeEngines "junit-vintage", "junit-jupiter"
-  }
+  useJUnitPlatform()
 }
