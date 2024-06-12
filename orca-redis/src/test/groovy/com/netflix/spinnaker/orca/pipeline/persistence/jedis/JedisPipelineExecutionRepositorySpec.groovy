@@ -145,7 +145,7 @@ class JedisPipelineExecutionRepositorySpec extends PipelineExecutionRepositoryTc
     then:
     jedis.zrange(RedisExecutionRepository.executionsByPipelineKey(pipeline.pipelineConfigId), 0, 1) == [
       pipeline.id
-    ] as Set<String>
+    ]
 
     when:
     repository.delete(pipeline.type, pipeline.id)

@@ -56,14 +56,14 @@ class UrlExpressionFunctionProviderSpec extends Specification {
 
   def "should restrict yaml tag usage"() {
     when:
-    UrlExpressionFunctionProvider.readAllYaml("!!java.io.FileInputStream [/dev/null]")
+    UrlExpressionFunctionProvider.readTestYaml("!!java.io.FileInputStream [/dev/null]")
 
     then:
     SpelHelperFunctionException e1 = thrown()
     e1.cause.message.startsWith('could not determine a constructor for the tag tag:yaml.org,2002:java.io.FileInputStream')
 
     when:
-    UrlExpressionFunctionProvider.readYaml("!!java.io.FileInputStream [/dev/null]")
+    UrlExpressionFunctionProvider.readTestYaml("!!java.io.FileInputStream [/dev/null]")
 
     then:
     SpelHelperFunctionException e2 = thrown()

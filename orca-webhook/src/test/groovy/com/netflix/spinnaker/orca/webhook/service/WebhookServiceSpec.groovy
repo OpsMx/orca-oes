@@ -27,6 +27,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.mock.http.client.MockClientHttpRequest
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.ResponseActions
 import spock.lang.Shared
@@ -92,7 +93,7 @@ class WebhookServiceSpec extends Specification {
     headers.add("customHeader", "value")
     StageExecution stageExecution = new StageExecutionImpl(null, null, null, [
         'url': "https://localhost/v1/test",
-        'method': HttpMethod.POST,
+        'method': "POST",
         'customHeaders': customHeaders,
         'payload': payload
     ])
@@ -128,7 +129,7 @@ class WebhookServiceSpec extends Specification {
     when:
     StageExecution stageExecution = new StageExecutionImpl(null, null, null, [
         'statusEndpoint': "https://localhost/v1/status/123",
-        'method': HttpMethod.GET,
+        'method': "GET",
         'customHeaders': customHeaders,
         'payload': null
     ])
@@ -169,7 +170,7 @@ class WebhookServiceSpec extends Specification {
     webhookService
     StageExecution stageExecution = new StageExecutionImpl(null, null, null, [
         'url': "https://localhost/v1/text/test",
-        'method': HttpMethod.GET,
+        'method': "GET",
         'customHeaders': null,
         'payload': null
     ])
@@ -191,7 +192,7 @@ class WebhookServiceSpec extends Specification {
     webhookService
     StageExecution stageExecution = new StageExecutionImpl(null, null, null, [
         'url': "https://localhost/v1/test",
-        'method': HttpMethod.PATCH,
+        'method': "PATCH",
         'customHeaders': null,
         'payload': null
     ])

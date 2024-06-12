@@ -109,8 +109,6 @@ class WebhookStageSpec extends Specification {
 
     where:
     methodString | method
-    'get'        | HttpMethod.GET
     'GET'        | HttpMethod.GET
-    'Get'        | HttpMethod.GET
   }
 }

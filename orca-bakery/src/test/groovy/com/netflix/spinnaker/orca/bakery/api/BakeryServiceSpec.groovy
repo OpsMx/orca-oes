@@ -17,12 +17,12 @@
 package com.netflix.spinnaker.orca.bakery.api
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.netflix.spinnaker.kork.retrofit.exceptions.SpinnakerHttpException
 import com.netflix.spinnaker.orca.bakery.config.BakeryConfiguration
 import com.netflix.spinnaker.orca.jackson.OrcaObjectMapper
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import retrofit.RequestInterceptor
-import retrofit.RetrofitError
 import retrofit.client.OkClient
 import spock.lang.Specification
 import spock.lang.Subject
@@ -34,6 +34,7 @@ import static retrofit.RestAdapter.LogLevel.FULL
 class BakeryServiceSpec extends Specification {
 
   private WireMockServer wireMockServer
+
   @Subject BakeryService bakery
 
   private static final region = "us-west-1"
@@ -116,7 +117,7 @@ class BakeryServiceSpec extends Specification {
     bakery.lookupStatus(region, statusId)
 
     then:
-    def ex = thrown(RetrofitError)
+    def ex = thrown(SpinnakerHttpException)
     ex.response.status == HTTP_NOT_FOUND
   }
 

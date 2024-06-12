@@ -19,8 +19,10 @@ package com.netflix.spinnaker.orca.front50
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.netflix.spectator.api.NoopRegistry
+import com.netflix.spinnaker.kork.artifacts.ArtifactTypes
 import com.netflix.spinnaker.kork.artifacts.model.Artifact
 import com.netflix.spinnaker.kork.artifacts.model.ExpectedArtifact
+import com.netflix.spinnaker.kork.web.exceptions.InvalidRequestException
 import com.netflix.spinnaker.orca.api.pipeline.models.PipelineExecution
 import com.netflix.spinnaker.orca.api.pipeline.models.StageExecution
 import com.netflix.spinnaker.orca.api.pipeline.ExecutionPreprocessor
@@ -70,8 +72,8 @@ class DependentPipelineStarterSpec extends Specification {
     def executionLauncher = Stub(ExecutionLauncher) {
       start(*_) >> { _, p ->
         gotMDC.putAll([
-          "X-SPINNAKER-USER": MDC.get("X-SPINNAKER-USER"),
-          "X-SPINNAKER-ACCOUNTS": MDC.get("X-SPINNAKER-ACCOUNTS"),
+            "X-SPINNAKER-USER": MDC.get("X-SPINNAKER-USER"),
+            "X-SPINNAKER-ACCOUNTS": MDC.get("X-SPINNAKER-ACCOUNTS"),
         ])
         return pipeline {
           name = p.name
@@ -83,22 +85,22 @@ class DependentPipelineStarterSpec extends Specification {
     ApplicationContext applicationContext = new StaticApplicationContext()
     applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
     dependentPipelineStarter = new DependentPipelineStarter(
-      applicationContext,
-      mapper,
-      new ContextParameterProcessor(),
-      Optional.empty(),
-      Optional.of(artifactUtils),
-      new NoopRegistry()
+        applicationContext,
+        mapper,
+        new ContextParameterProcessor(),
+        Optional.empty(),
+        Optional.of(artifactUtils),
+        new NoopRegistry()
     )
 
     when:
     def result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null /*user*/,
-      parentPipeline,
-      [:],
-      null,
-      buildAuthenticatedUser("user", ["acct3", "acct4"])
+        triggeredPipelineConfig,
+        null /*user*/,
+        parentPipeline,
+        [:],
+        null,
+        buildAuthenticatedUser("user", ["acct3", "acct4"])
     )
     MDC.clear()
 
@@ -109,12 +111,12 @@ class DependentPipelineStarterSpec extends Specification {
 
     when:
     result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null /*user*/,
-      parentPipeline,
-      [:],
-      null,
-      null
+        triggeredPipelineConfig,
+        null /*user*/,
+        parentPipeline,
+        [:],
+        null,
+        null
     )
     MDC.clear()
 
@@ -136,12 +138,12 @@ class DependentPipelineStarterSpec extends Specification {
     def applicationContext = new StaticApplicationContext()
     applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
     dependentPipelineStarter = new DependentPipelineStarter(
-      applicationContext,
-      mapper,
-      new ContextParameterProcessor(),
-      Optional.empty(),
-      Optional.of(artifactUtils),
-      new NoopRegistry()
+        applicationContext,
+        mapper,
+        new ContextParameterProcessor(),
+        Optional.empty(),
+        Optional.of(artifactUtils),
+        new NoopRegistry()
     )
 
     and:
@@ -155,12 +157,12 @@ class DependentPipelineStarterSpec extends Specification {
 
     when:
     def result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null /*user*/,
-      parentPipeline,
-      [:],
-      null,
-      buildAuthenticatedUser("user", [])
+        triggeredPipelineConfig,
+        null /*user*/,
+        parentPipeline,
+        [:],
+        null,
+        buildAuthenticatedUser("user", [])
     )
 
     then:
@@ -170,16 +172,16 @@ class DependentPipelineStarterSpec extends Specification {
   def "should find artifacts from triggering pipeline"() {
     given:
     def triggeredPipelineConfig = [
-      name             : "triggered",
-      id               : "triggered",
-      expectedArtifacts: [[
-                            id: "id1",
-                            matchArtifact: [
-                              kind: "gcs",
-                              name: "gs://test/file.yaml",
-                              type: "gcs/object"
-                            ]
-                          ]]
+        name             : "triggered",
+        id               : "triggered",
+        expectedArtifacts: [[
+                                id: "id1",
+                                matchArtifact: [
+                                    kind: "gcs",
+                                    name: "gs://test/file.yaml",
+                                    type: "gcs/object"
+                                ]
+                            ]]
     ];
     Artifact testArtifact = Artifact.builder().type("gcs/object").name("gs://test/file.yaml").build()
     def parentPipeline = pipeline {
@@ -191,12 +193,12 @@ class DependentPipelineStarterSpec extends Specification {
     def applicationContext = new StaticApplicationContext()
     applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
     dependentPipelineStarter = new DependentPipelineStarter(
-      applicationContext,
-      mapper,
-      new ContextParameterProcessor(),
-      Optional.empty(),
-      Optional.of(artifactUtils),
-      new NoopRegistry()
+        applicationContext,
+        mapper,
+        new ContextParameterProcessor(),
+        Optional.empty(),
+        Optional.of(artifactUtils),
+        new NoopRegistry()
     )
 
     and:
@@ -213,12 +215,12 @@ class DependentPipelineStarterSpec extends Specification {
 
     when:
     def result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null,
-      parentPipeline,
-      [:],
-      null,
-      buildAuthenticatedUser("user", [])
+        triggeredPipelineConfig,
+        null,
+        parentPipeline,
+        [:],
+        null,
+        buildAuthenticatedUser("user", [])
     )
 
     then:
@@ -229,16 +231,16 @@ class DependentPipelineStarterSpec extends Specification {
   def "should find artifacts from parent pipeline stage"() {
     given:
     def triggeredPipelineConfig = [
-      name             : "triggered",
-      id               : "triggered",
-      expectedArtifacts: [[
-                            id: "id1",
-                            matchArtifact: [
-                              kind: "gcs",
-                              name: "gs://test/file.yaml",
-                              type: "gcs/object"
-                            ]
-                          ]]
+        name             : "triggered",
+        id               : "triggered",
+        expectedArtifacts: [[
+                                id: "id1",
+                                matchArtifact: [
+                                    kind: "gcs",
+                                    name: "gs://test/file.yaml",
+                                    type: "gcs/object"
+                                ]
+                            ]]
     ];
     Artifact testArtifact = Artifact.builder().type("gcs/object").name("gs://test/file.yaml").build()
     def parentPipeline = pipeline {
@@ -260,12 +262,12 @@ class DependentPipelineStarterSpec extends Specification {
     def applicationContext = new StaticApplicationContext()
     applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
     dependentPipelineStarter = new DependentPipelineStarter(
-      applicationContext,
-      mapper,
-      new ContextParameterProcessor(),
-      Optional.empty(),
-      Optional.of(artifactUtils),
-      new NoopRegistry()
+        applicationContext,
+        mapper,
+        new ContextParameterProcessor(),
+        Optional.empty(),
+        Optional.of(artifactUtils),
+        new NoopRegistry()
     )
 
     and:
@@ -282,12 +284,12 @@ class DependentPipelineStarterSpec extends Specification {
 
     when:
     def result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null,
-      parentPipeline,
-      [:],
-      "stage1",
-      buildAuthenticatedUser("user", [])
+        triggeredPipelineConfig,
+        null,
+        parentPipeline,
+        [:],
+        "stage1",
+        buildAuthenticatedUser("user", [])
     )
 
     then:
@@ -298,16 +300,16 @@ class DependentPipelineStarterSpec extends Specification {
   def "should find artifacts from triggering pipeline without expected artifacts"() {
     given:
     def triggeredPipelineConfig = [
-      name             : "triggered",
-      id               : "triggered",
-      expectedArtifacts: [[
-                            id: "id1",
-                            matchArtifact: [
-                              kind: "gcs",
-                              name: "gs://test/file.yaml",
-                              type: "gcs/object"
-                            ]
-                          ]]
+        name             : "triggered",
+        id               : "triggered",
+        expectedArtifacts: [[
+                                id: "id1",
+                                matchArtifact: [
+                                    kind: "gcs",
+                                    name: "gs://test/file.yaml",
+                                    type: "gcs/object"
+                                ]
+                            ]]
     ]
     Artifact testArtifact1 = Artifact.builder().type("gcs/object").name("gs://test/file.yaml").build()
     Artifact testArtifact2 = Artifact.builder().type("docker/image").name("gcr.io/project/image").build()
@@ -320,12 +322,12 @@ class DependentPipelineStarterSpec extends Specification {
     def applicationContext = new StaticApplicationContext()
     applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
     dependentPipelineStarter = new DependentPipelineStarter(
-      applicationContext,
-      mapper,
-      new ContextParameterProcessor(),
-      Optional.empty(),
-      Optional.of(artifactUtils),
-      new NoopRegistry()
+        applicationContext,
+        mapper,
+        new ContextParameterProcessor(),
+        Optional.empty(),
+        Optional.of(artifactUtils),
+        new NoopRegistry()
     )
 
     and:
@@ -342,19 +344,20 @@ class DependentPipelineStarterSpec extends Specification {
 
     when:
     def result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null,
-      parentPipeline,
-      [:],
-      null,
-      buildAuthenticatedUser("user", [])
+        triggeredPipelineConfig,
+        null,
+        parentPipeline,
+        [:],
+        null,
+        buildAuthenticatedUser("user", [])
     )
 
     then:
     result.trigger.artifacts.size() == 2
     result.trigger.artifacts*.name.contains(testArtifact1.name)
     result.trigger.artifacts*.name.contains(testArtifact2.name)
-    result.trigger.resolvedExpectedArtifacts.size() == 0
+    result.trigger.resolvedExpectedArtifacts.size() == 1
+    result.trigger.resolvedExpectedArtifacts.get(0).id.equals("id1")
   }
 
   def "should find expected artifacts from pipeline trigger"() {
@@ -363,20 +366,20 @@ class DependentPipelineStarterSpec extends Specification {
         name: "triggered",
         id: "triggered",
         expectedArtifacts: [[
-            id: "id1",
-            matchArtifact: [
-                kind: "gcs",
-                name: "gs://test/file.yaml",
-                type: "gcs/object"
-            ]
-        ]],
+                                id: "id1",
+                                matchArtifact: [
+                                    kind: "gcs",
+                                    name: "gs://test/file.yaml",
+                                    type: "gcs/object"
+                                ]
+                            ]],
         triggers: [[
-            type: "pipeline",
-            pipeline: "5e96d1e8-a3c0-4458-b3a4-fda17e0d5ab5",
-            expectedArtifactIds: ["id1"]
-        ], [
-            type: "jenkins"
-        ]]
+                       type: "pipeline",
+                       pipeline: "5e96d1e8-a3c0-4458-b3a4-fda17e0d5ab5",
+                       expectedArtifactIds: ["id1"]
+                   ], [
+                       type: "jenkins"
+                   ]]
     ]
     Artifact testArtifact1 = Artifact.builder().type("gcs/object").name("gs://test/file.yaml").build()
     Artifact testArtifact2 = Artifact.builder().type("docker/image").name("gcr.io/project/image").build()
@@ -434,20 +437,20 @@ class DependentPipelineStarterSpec extends Specification {
         name: "triggered",
         id: "triggered",
         expectedArtifacts: [[
-            id: "id1",
-            matchArtifact: [
-                kind: "gcs",
-                name: "gs://test/file.yaml",
-                type: "gcs/object"
-            ]
-        ]],
+                                id: "id1",
+                                matchArtifact: [
+                                    kind: "gcs",
+                                    name: "gs://test/file.yaml",
+                                    type: "gcs/object"
+                                ]
+                            ]],
         triggers: [[
-            type: "pipeline",
-            pipeline: "5e96d1e8-a3c0-4458-b3a4-fda17e0d5ab5"
-        ], [
-            type: "jenkins",
-            expectedArtifactIds: ["id1"]
-        ]]
+                       type: "pipeline",
+                       pipeline: "5e96d1e8-a3c0-4458-b3a4-fda17e0d5ab5"
+                   ], [
+                       type: "jenkins",
+                       expectedArtifactIds: ["id1"]
+                   ]]
     ]
     Artifact testArtifact1 = Artifact.builder().type("gcs/object").name("gs://test/file.yaml").build()
     Artifact testArtifact2 = Artifact.builder().type("docker/image").name("gcr.io/project/image").build()
@@ -495,7 +498,8 @@ class DependentPipelineStarterSpec extends Specification {
     result.trigger.artifacts.size() == 2
     result.trigger.artifacts*.name.contains(testArtifact1.name)
     result.trigger.artifacts*.name.contains(testArtifact2.name)
-    result.trigger.resolvedExpectedArtifacts.size() == 0
+    result.trigger.resolvedExpectedArtifacts.size() == 1
+    result.trigger.resolvedExpectedArtifacts.get(0).id.equals("id1")
   }
 
   def "should find expected artifacts from parent pipeline trigger if triggered by pipeline stage"() {
@@ -575,6 +579,89 @@ class DependentPipelineStarterSpec extends Specification {
     result.trigger.artifacts.findAll { it.name == "gcr.io/project/image" }.version.containsAll(["42", "1337"])
   }
 
+  def "should fail pipeline when parent pipeline does not provide expected artifacts"() {
+    given:
+    def artifact = Artifact.builder().type("embedded/base64").name("baked-manifest").build()
+    def expectedArtifactId = "826018cd-e278-4493-a6a5-4b0a0166a843"
+    def expectedArtifact = ExpectedArtifact
+        .builder()
+        .id(expectedArtifactId)
+        .matchArtifact(artifact)
+        .build()
+
+    def parentPipeline = pipeline {
+      name = "my-parent-pipeline"
+      authentication = new PipelineExecution.AuthenticationDetails("username", "account1")
+      pipelineConfigId = "fe0b3537-3101-46a1-8e08-ab57cf65a207"
+      stage {
+        id = "my-stage-1"
+        refId = "1"
+        // not passing artifacts
+      }
+    }
+
+    def triggeredPipelineConfig = [
+        name             : "triggered-by-stage",
+        id               : "triggered-id",
+        stages           : [
+            [
+                name: "My Stage",
+                type: "bakeManifest",
+            ]
+        ],
+        expectedArtifacts: [
+            expectedArtifact
+        ],
+        triggers         : [
+            [
+                type               : "pipeline",
+                pipeline           : parentPipeline.pipelineConfigId,
+                expectedArtifactIds: [expectedArtifactId]
+            ]
+        ],
+    ]
+
+    def executionLauncher = Mock(ExecutionLauncher)
+    def applicationContext = new StaticApplicationContext()
+    applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
+    dependentPipelineStarter = new DependentPipelineStarter(
+        applicationContext,
+        mapper,
+        new ContextParameterProcessor(),
+        Optional.empty(),
+        Optional.of(artifactUtils),
+        new NoopRegistry()
+    )
+
+    and:
+    def error
+    executionLauncher.fail(_, _, _) >> { PIPELINE, processedPipeline, artifactError ->
+      error = artifactError
+      return pipeline {
+        name = processedPipeline.name
+        id = processedPipeline.name
+        trigger = mapper.convertValue(processedPipeline.trigger, Trigger)
+      }
+    }
+
+    when:
+    def result = dependentPipelineStarter.trigger(
+        triggeredPipelineConfig,
+        null,
+        parentPipeline,
+        [:],
+        "my-stage-1",
+        buildAuthenticatedUser("username", [])
+    )
+
+    then:
+    1 * artifactUtils.resolveArtifacts(_)
+    error != null
+    error instanceof InvalidRequestException
+    error.message == "Unmatched expected artifact " + expectedArtifact + " could not be resolved."
+    result.trigger.artifacts.size() == 0
+  }
+
   def "should resolve expressions in trigger"() {
     given:
     def triggeredPipelineConfig = [name: "triggered", id: "triggered", parameterConfig: [[name: 'a', default: '${2 == 2}']]]
@@ -587,12 +674,12 @@ class DependentPipelineStarterSpec extends Specification {
     def applicationContext = new StaticApplicationContext()
     applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
     dependentPipelineStarter = new DependentPipelineStarter(
-      applicationContext,
-      mapper,
-      new ContextParameterProcessor(),
-      Optional.empty(),
-      Optional.of(artifactUtils),
-      new NoopRegistry()
+        applicationContext,
+        mapper,
+        new ContextParameterProcessor(),
+        Optional.empty(),
+        Optional.of(artifactUtils),
+        new NoopRegistry()
     )
 
     and:
@@ -604,12 +691,12 @@ class DependentPipelineStarterSpec extends Specification {
 
     when:
     def result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null /*user*/,
-      parentPipeline,
-      [:],
-      null,
-      buildAuthenticatedUser("user", [])
+        triggeredPipelineConfig,
+        null /*user*/,
+        parentPipeline,
+        [:],
+        null,
+        buildAuthenticatedUser("user", [])
     )
 
     then:
@@ -634,12 +721,12 @@ class DependentPipelineStarterSpec extends Specification {
     def applicationContext = new StaticApplicationContext()
     applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
     dependentPipelineStarter = new DependentPipelineStarter(
-      applicationContext,
-      mapper,
-      new ContextParameterProcessor(),
-      Optional.empty(),
-      Optional.of(artifactUtils),
-      new NoopRegistry()
+        applicationContext,
+        mapper,
+        new ContextParameterProcessor(),
+        Optional.empty(),
+        Optional.of(artifactUtils),
+        new NoopRegistry()
     )
 
     and:
@@ -651,12 +738,12 @@ class DependentPipelineStarterSpec extends Specification {
 
     when:
     def result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null /*user*/,
-      parentPipeline,
-      [:],
-      null,
-      buildAuthenticatedUser("user", [])
+        triggeredPipelineConfig,
+        null /*user*/,
+        parentPipeline,
+        [:],
+        null,
+        buildAuthenticatedUser("user", [])
     )
 
     then:
@@ -666,66 +753,66 @@ class DependentPipelineStarterSpec extends Specification {
   def "should trigger v1 templated pipelines with dynamic source using prior artifact"() {
     given:
     def triggeredPipelineConfig = [
-      id: "triggered",
-      type: "templatedPipeline",
-      config: [
-        pipeline: [
-          application: "covfefe",
-          name: "Templated pipeline",
-          template: [
-            source: "{% for artifact in trigger.artifacts %}{% if artifact.type == 'spinnaker-pac' && artifact.name == 'wait' %}{{ artifact.reference }}{% endif %}{% endfor %}"
-          ]
+        id: "triggered",
+        type: "templatedPipeline",
+        config: [
+            pipeline: [
+                application: "covfefe",
+                name: "Templated pipeline",
+                template: [
+                    source: "{% for artifact in trigger.artifacts %}{% if artifact.type == 'spinnaker-pac' && artifact.name == 'wait' %}{{ artifact.reference }}{% endif %}{% endfor %}"
+                ]
+            ],
+            schema: "1"
         ],
-        schema: "1"
-      ],
-      expectedArtifacts: [[
-        defaultArtifact: [
-          customKind: true,
-          id: "091b682c-10ac-441a-97f2-659113128960",
-        ],
-        displayName: "friendly-gecko-6",
-        id: "28907e3a-e529-473d-bf2d-b3737c9d6dc6",
-        matchArtifact: [
-          customKind: true,
-          id: "daef2911-ea5c-4098-aa07-ee2535b2788d",
-          name: "wait",
-          type: "spinnaker-pac"
-        ],
-        useDefaultArtifact: false,
-        usePriorArtifact: true
-      ]],
-      triggers: [[
-           type                : "pipeline",
-           pipeline            : "5e96d1e8-a3c0-4458-b3a4-fda17e0d5ab5",
-           expectedArtifactIds : ["28907e3a-e529-473d-bf2d-b3737c9d6dc6"]
-       ], [
-           type                : "jenkins",
-           expectedArtifactIds : ["unrelated_id"]
-       ]]
+        expectedArtifacts: [[
+                                defaultArtifact: [
+                                    customKind: true,
+                                    id: "091b682c-10ac-441a-97f2-659113128960",
+                                ],
+                                displayName: "friendly-gecko-6",
+                                id: "28907e3a-e529-473d-bf2d-b3737c9d6dc6",
+                                matchArtifact: [
+                                    customKind: true,
+                                    id: "daef2911-ea5c-4098-aa07-ee2535b2788d",
+                                    name: "wait",
+                                    type: "spinnaker-pac"
+                                ],
+                                useDefaultArtifact: false,
+                                usePriorArtifact: true
+                            ]],
+        triggers: [[
+                       type                : "pipeline",
+                       pipeline            : "5e96d1e8-a3c0-4458-b3a4-fda17e0d5ab5",
+                       expectedArtifactIds : ["28907e3a-e529-473d-bf2d-b3737c9d6dc6"]
+                   ], [
+                       type                : "jenkins",
+                       expectedArtifactIds : ["unrelated_id"]
+                   ]]
     ]
     def triggeredPipelineTemplate = mapper.convertValue([
-      schema: "1",
-      id: "barebones",
-      stages: [[
-        id: "wait1",
-        type: "wait",
-        name: "Wait for 5 seconds",
-        config: [
-          waitTime: 5
-        ]
-      ]]
+        schema: "1",
+        id: "barebones",
+        stages: [[
+                     id: "wait1",
+                     type: "wait",
+                     name: "Wait for 5 seconds",
+                     config: [
+                         waitTime: 5
+                     ]
+                 ]]
     ], PipelineTemplate)
     def priorExecution = pipeline {
       id = "01DCKTEZPRCMFV1H35EDFC62RG"
       trigger = new DefaultTrigger("manual", null, "user@acme.com", [:], [
-        Artifact.builder()
-        .customKind(false)
-        .metadata([fileName: "wait.0.1.yml"])
-        .name("wait")
-        .reference("https://artifactory.acme.com/spinnaker-pac/wait.0.1.yml")
-        .type("spinnaker-pac")
-        .version("spinnaker-pac")
-        .build()
+          Artifact.builder()
+              .customKind(false)
+              .metadata([fileName: "wait.0.1.yml"])
+              .name("wait")
+              .reference("https://artifactory.acme.com/spinnaker-pac/wait.0.1.yml")
+              .type("spinnaker-pac")
+              .version("spinnaker-pac")
+              .build()
       ])
     }
     def parentPipeline = pipeline {
@@ -741,24 +828,24 @@ class DependentPipelineStarterSpec extends Specification {
     def registry = new NoopRegistry()
     def parameterProcessor = new ContextParameterProcessor()
     def pipelineTemplatePreprocessor = new PipelineTemplatePreprocessor(
-      mapper,
-      new SchemaVersionHandler(
-        new V1SchemaHandlerGroup(
-          templateLoader,
-          renderer,
-          mapper,
-          registry),
-        Mock(V2SchemaHandlerGroup)),
-      new PipelineTemplateErrorHandler(),
-      registry)
+        mapper,
+        new SchemaVersionHandler(
+            new V1SchemaHandlerGroup(
+                templateLoader,
+                renderer,
+                mapper,
+                registry),
+            Mock(V2SchemaHandlerGroup)),
+        new PipelineTemplateErrorHandler(),
+        registry)
     applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
     dependentPipelineStarter = new DependentPipelineStarter(
-      applicationContext,
-      mapper,
-      parameterProcessor,
-      Optional.of([pipelineTemplatePreprocessor] as List<ExecutionPreprocessor>),
-      Optional.of(artifactUtils),
-      registry
+        applicationContext,
+        mapper,
+        parameterProcessor,
+        Optional.of([pipelineTemplatePreprocessor] as List<ExecutionPreprocessor>),
+        Optional.of(artifactUtils),
+        registry
     )
 
     and:
@@ -769,18 +856,18 @@ class DependentPipelineStarterSpec extends Specification {
         stages.addAll(mapper.convertValue(p.stages, type))
       }
     }
-    1 * templateLoader.load(_ as TemplateConfiguration.TemplateSource) >> [triggeredPipelineTemplate]
+    1 * templateLoader.load(_ as TemplateConfiguration.TemplateSource, _, _) >> [triggeredPipelineTemplate]
     1 * executionRepository.retrievePipelinesForPipelineConfigId("triggered", _ as ExecutionRepository.ExecutionCriteria) >>
-      Observable.just(priorExecution)
+        Observable.just(priorExecution)
 
     when:
     def result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null /*user*/,
-      parentPipeline,
-      [:],
-      null,
-      buildAuthenticatedUser("user", [])
+        triggeredPipelineConfig,
+        null /*user*/,
+        parentPipeline,
+        [:],
+        null,
+        buildAuthenticatedUser("user", [])
     )
 
     then:
@@ -793,78 +880,78 @@ class DependentPipelineStarterSpec extends Specification {
   def "should trigger v1 templated pipelines with dynamic source using inherited expectedArtifacts"() {
     given:
     def triggeredPipelineConfig = [
-      id: "triggered",
-      type: "templatedPipeline",
-      config: [
-        configuration: [
-          inherit: ["expectedArtifacts", "triggers"]
+        id: "triggered",
+        type: "templatedPipeline",
+        config: [
+            configuration: [
+                inherit: ["expectedArtifacts", "triggers"]
+            ],
+            pipeline: [
+                application: "covfefe",
+                name: "Templated pipeline",
+                template: [
+                    source: "{% for artifact in trigger.artifacts %}{% if artifact.type == 'spinnaker-pac' && artifact.name == 'wait' %}{{ artifact.reference }}{% endif %}{% endfor %}"
+                ]
+            ],
+            schema: "1"
         ],
-        pipeline: [
-          application: "covfefe",
-          name: "Templated pipeline",
-          template: [
-            source: "{% for artifact in trigger.artifacts %}{% if artifact.type == 'spinnaker-pac' && artifact.name == 'wait' %}{{ artifact.reference }}{% endif %}{% endfor %}"
-          ]
-        ],
-        schema: "1"
-      ],
-      triggers: [[
-          type                : "pipeline",
-          pipeline            : "5e96d1e8-a3c0-4458-b3a4-fda17e0d5ab5",
-          expectedArtifactIds : ["helm-chart"]
-      ]]
+        triggers: [[
+                       type                : "pipeline",
+                       pipeline            : "5e96d1e8-a3c0-4458-b3a4-fda17e0d5ab5",
+                       expectedArtifactIds : ["helm-chart"]
+                   ]]
     ]
     def triggeredPipelineTemplate = mapper.convertValue([
-      schema: "1",
-      id: "barebones",
-      configuration: [
-        expectedArtifacts: [[
-                              defaultArtifact: [
-                                customKind: true
-                              ],
-                              id: "helm-chart",
-                              displayName: "helm-chart",
-                              matchArtifact: [
-                                customKind: true,
-                                type: "http/file",
-                                name: "artifact-name"
-                              ],
-                              useDefaultArtifact: false,
-                              usePriorArtifact: false
-        ]]
-      ],
-      stages: [[
-                 id: "bake-manifest",
-                 type: "bakeManifest",
-                 name: "Bake manifest",
-                 config: [
-                   templateRenderer: "HELM2",
-                   inputArtifacts: [[
-                                      account: "my-account",
-                                      id: "helm-chart"
-                                    ]],
-                   expectedArtifacts: [[
-                                         id: "baked-manifest",
-                                         matchArtifact: [
-                                           kind: "base64",
-                                           name: "baked-manifest",
-                                           type: "embedded/base64"
-                                         ],
-                                         useDefaultArtifact: false
-                                       ]],
-                   namespace: "a-namespace",
-                   outputName: "baked-manifest"
-                 ]
-               ]]
+        schema: "1",
+        id: "barebones",
+        configuration: [
+            expectedArtifacts: [[
+                                    defaultArtifact: [
+                                        customKind: true
+                                    ],
+                                    id: "helm-chart",
+                                    displayName: "helm-chart",
+                                    matchArtifact: [
+                                        customKind: true,
+                                        type: "http/file",
+                                        name: "artifact-name"
+                                    ],
+                                    useDefaultArtifact: false,
+                                    usePriorArtifact: false
+                                ]]
+        ],
+        stages: [[
+                     id: "bake-manifest",
+                     type: "bakeManifest",
+                     name: "Bake manifest",
+                     config: [
+                         templateRenderer: "HELM2",
+                         inputArtifacts: [[
+                                              account: "my-account",
+                                              id: "helm-chart"
+                                          ]],
+                         expectedArtifacts: [[
+                                                 id: "baked-manifest",
+                                                 matchArtifact: [
+                                                     kind: "base64",
+                                                     name: "baked-manifest",
+                                                     type: ArtifactTypes.EMBEDDED_BASE64.getMimeType()
+                                                 ],
+                                                 useDefaultArtifact: false
+                                             ]],
+                         namespace: "a-namespace",
+                         outputName: "baked-manifest"
+                     ]
+                 ]]
 
     ], PipelineTemplate)
 
     Artifact testArtifact = Artifact.builder()
-      .type("http/file")
-      .name("artifact-name")
-      .customKind(true)
-      .reference("a-reference")
-      .build()
+        .type("http/file")
+        .name("artifact-name")
+        .customKind(true)
+        .reference("a-reference")
+        .build()
     def parentPipeline = pipeline {
       name = "parent"
       trigger = new DefaultTrigger("webhook", null, "test", [:], [testArtifact])
@@ -878,24 +965,24 @@ class DependentPipelineStarterSpec extends Specification {
     def registry = new NoopRegistry()
     def parameterProcessor = new ContextParameterProcessor()
     def pipelineTemplatePreprocessor = new PipelineTemplatePreprocessor(
-      mapper,
-      new SchemaVersionHandler(
-        new V1SchemaHandlerGroup(
-          templateLoader,
-          renderer,
-          mapper,
-          registry),
-        Mock(V2SchemaHandlerGroup)),
-      new PipelineTemplateErrorHandler(),
-      registry)
+        mapper,
+        new SchemaVersionHandler(
+            new V1SchemaHandlerGroup(
+                templateLoader,
+                renderer,
+                mapper,
+                registry),
+            Mock(V2SchemaHandlerGroup)),
+        new PipelineTemplateErrorHandler(),
+        registry)
     applicationContext.beanFactory.registerSingleton("pipelineLauncher", executionLauncher)
     dependentPipelineStarter = new DependentPipelineStarter(
-      applicationContext,
-      mapper,
-      parameterProcessor,
-      Optional.of([pipelineTemplatePreprocessor] as List<ExecutionPreprocessor>),
-      Optional.of(artifactUtils),
-      registry
+        applicationContext,
+        mapper,
+        parameterProcessor,
+        Optional.of([pipelineTemplatePreprocessor] as List<ExecutionPreprocessor>),
+        Optional.of(artifactUtils),
+        registry
     )
 
     and:
@@ -908,7 +995,7 @@ class DependentPipelineStarterSpec extends Specification {
         stages.addAll(mapper.convertValue(execution.stages, type))
       }
     }
-    1 * templateLoader.load(_ as TemplateConfiguration.TemplateSource) >> [triggeredPipelineTemplate]
+    1 * templateLoader.load(_ as TemplateConfiguration.TemplateSource, _, _) >> [triggeredPipelineTemplate]
 
     artifactUtils.getArtifactsForPipelineId(*_) >> {
       return new ArrayList<>()
@@ -916,12 +1003,12 @@ class DependentPipelineStarterSpec extends Specification {
 
     when:
     def result = dependentPipelineStarter.trigger(
-      triggeredPipelineConfig,
-      null /*user*/,
-      parentPipeline,
-      [:],
-      null,
-      buildAuthenticatedUser("user", [])
+        triggeredPipelineConfig,
+        null /*user*/,
+        parentPipeline,
+        [:],
+        null,
+        buildAuthenticatedUser("user", [])
     )
 
     then:

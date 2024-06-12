@@ -25,6 +25,7 @@ import com.netflix.spinnaker.orca.webhook.service.WebhookService
 import com.netflix.spinnaker.orca.webhook.tasks.MonitorWebhookTask
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
+import org.springframework.mock.http.client.MockClientHttpRequest
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -49,7 +50,7 @@ class PreconfiguredWebhookStageSpec extends Specification {
     stage.context == [
       url: "a",
       customHeaders: ["header": ["value1"]],
-      method: HttpMethod.POST,
+      method: new MockClientHttpRequest().setMethod(HttpMethod.POST),
       payload: "b",
       failFastStatusCodes: [500, 501],
       waitForCompletion: true,
@@ -65,7 +66,7 @@ class PreconfiguredWebhookStageSpec extends Specification {
       permissions: null,
       signalCancellation: true,
       cancelEndpoint: "i",
-      cancelMethod: HttpMethod.POST,
+      cancelMethod: new MockClientHttpRequest().setMethod(HttpMethod.POST),
       cancelPayload: "j"
     ]
   }
@@ -75,7 +76,7 @@ class PreconfiguredWebhookStageSpec extends Specification {
     def stage = new StageExecutionImpl(PipelineExecutionImpl.newPipeline("orca"), "webhook_1", [
       url: "a",
       customHeaders: ["header": ["value1"]],
-      method: HttpMethod.POST,
+      method: new MockClientHttpRequest().setMethod(HttpMethod.POST),
       payload: "b",
       failFastStatusCodes: [500, 501],
       waitForCompletion: true,
@@ -90,7 +91,7 @@ class PreconfiguredWebhookStageSpec extends Specification {
       permissions: null,
       signalCancellation: true,
       cancelEndpoint: "i",
-      cancelMethod: HttpMethod.POST,
+      cancelMethod: new MockClientHttpRequest().setMethod(HttpMethod.POST),
       cancelPayload: "j"
     ])
 
@@ -102,7 +103,7 @@ class PreconfiguredWebhookStageSpec extends Specification {
     stage.context == [
       url: "a",
       customHeaders: ["header": ["value1"]],
-      method: HttpMethod.POST,
+      method: new MockClientHttpRequest().setMethod(HttpMethod.POST),
       payload: "b",
       failFastStatusCodes: [500, 501],
       waitForCompletion: true,
@@ -118,7 +119,7 @@ class PreconfiguredWebhookStageSpec extends Specification {
       permissions: null,
       signalCancellation: true,
       cancelEndpoint: "i",
-      cancelMethod: HttpMethod.POST,
+      cancelMethod: new MockClientHttpRequest().setMethod(HttpMethod.POST),
       cancelPayload: "j"
     ]
   }
@@ -127,10 +128,10 @@ class PreconfiguredWebhookStageSpec extends Specification {
     def customHeaders = new HttpHeaders()
     customHeaders.add("header", "value1")
     return new WebhookProperties.PreconfiguredWebhook(
-      label: label, description: description, type: type, url: "a", customHeaders: customHeaders, method: HttpMethod.POST, payload: "b",
+      label: label, description: description, type: type, url: "a", customHeaders: customHeaders, method: new MockClientHttpRequest().setMethod(HttpMethod.POST), payload: "b",
       failFastStatusCodes: [500, 501], waitForCompletion: true, statusUrlResolution: WebhookProperties.StatusUrlResolution.locationHeader,
       statusUrlJsonPath: "c", statusJsonPath: "d", progressJsonPath: "e", successStatuses: "f", canceledStatuses: "g", terminalStatuses: "h",
-      signalCancellation: true, cancelEndpoint: "i", cancelMethod: HttpMethod.POST, cancelPayload: "j"
+      signalCancellation: true, cancelEndpoint: "i", cancelMethod: new MockClientHttpRequest().setMethod(HttpMethod.POST), cancelPayload: "j"
     )
   }
 }

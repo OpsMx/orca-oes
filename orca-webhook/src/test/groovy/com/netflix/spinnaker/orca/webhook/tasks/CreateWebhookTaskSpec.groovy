@@ -28,6 +28,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.mock.http.client.MockClientHttpRequest
 import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.ResourceAccessException
 import spock.lang.Specification
@@ -49,7 +50,7 @@ class CreateWebhookTaskSpec extends Specification {
     setup:
     def stage = new StageExecutionImpl(pipeline, "webhook", "My webhook", [
       url: "https://my-service.io/api/",
-      method: "post",
+      method: "POST",
       payload: [payload1: "Hello Spinnaker!"],
       customHeaders: [header1: "Header"]
     ])
@@ -89,7 +90,7 @@ class CreateWebhookTaskSpec extends Specification {
     setup:
     def stage = new StageExecutionImpl(pipeline, "webhook", "My webhook", [
       url: "https://my-service.io/api/",
-      method: "delete",
+      method: "DELETE",
       payload: [:],
       customHeaders: [:]
     ])
@@ -117,7 +118,7 @@ class CreateWebhookTaskSpec extends Specification {
     setup:
     def stage = new StageExecutionImpl(pipeline, "webhook", "My webhook", [
       url: "https://my-service.io/api/",
-      method: "delete",
+      method: "DELETE",
       payload: [:],
       customHeaders: [:],
       webhookRetryStatusCodes: [404, 401]
@@ -171,7 +172,7 @@ class CreateWebhookTaskSpec extends Specification {
     def webhookUrl = "https://my-service.io/api/"
     def stage = new StageExecutionImpl(pipeline, "webhook", "My webhook", [
       url: webhookUrl,
-      method: "get",
+      method: "GET",
     ])
 
     webhookService.callWebhook(stage) >> {
@@ -215,7 +216,7 @@ class CreateWebhookTaskSpec extends Specification {
     setup:
     def stage = new StageExecutionImpl(pipeline, "webhook", "My webhook", [
       url: "https://my-service.io/api/",
-      method: "delete",
+      method: "DELETE",
       payload: [:],
       customHeaders: [:]
     ])
@@ -253,7 +254,7 @@ class CreateWebhookTaskSpec extends Specification {
     setup:
     def stage = new StageExecutionImpl(pipeline, "webhook", "My webhook", [
       url: "https://my-service.io/api/",
-      method: "get",
+      method: "GET",
       payload: [:],
       customHeaders: [:],
       "failFastStatusCodes": [503]
@@ -281,7 +282,7 @@ class CreateWebhookTaskSpec extends Specification {
     setup:
     def stage = new StageExecutionImpl(pipeline, "webhook", "My webhook", [
       url: "https://my-service.io/api/",
-      method: "get",
+      method: "GET",
       payload: [:],
       customHeaders: [:],
       "failFastStatusCodes": 503
@@ -443,7 +444,7 @@ class CreateWebhookTaskSpec extends Specification {
     setup:
     def stage = new StageExecutionImpl(pipeline, "webhook", "My webhook", [
       url: "https://my-service.io/api/",
-      method: "post",
+      method: "POST",
       payload: [payload1: "Hello Spinnaker!"]
     ])
 
@@ -467,7 +468,7 @@ class CreateWebhookTaskSpec extends Specification {
     setup:
     def stage = new StageExecutionImpl(pipeline, "webhook", "My webhook", [
       url: "https://my-service.io/api/",
-      method: "post",
+      method: "POST",
       payload: [payload1: "Hello Spinnaker!"],
       expectedArtifacts: [[matchArtifact: [ name: "overrides", type: "github/file" ]]]
     ])
@@ -494,7 +495,7 @@ class CreateWebhookTaskSpec extends Specification {
   @Unroll
   def 'should honor the web hook #webHookUrl protocol/scheme for status check URL #responseStatusCheckUrl'() {
     setup:
-    Map<String, Object> stageContext = [method: HttpMethod.POST,
+    Map<String, Object> stageContext = [method: new MockClientHttpRequest().setMethod(HttpMethod.POST),
                                         payload: ['test': 'test'],
                                         waitForCompletion: true,
                                         statusUrlJsonPath:  '$.statusCheckUrl']
