@@ -18,7 +18,9 @@ apply from: "$rootDir/gradle/kotlin.gradle"
 
 dependencies {
   implementation(project(":orca-api"))
-
+  api("com.ninja-squad:springmockk:4.0.2") {
+    force = true
+  }
   testImplementation(project(":orca-web"))
   testImplementation(project(":orca-queue"))
   testImplementation(project(":orca-clouddriver"))

@@ -16,9 +16,7 @@
 
 package com.netflix.spinnaker.orca.q.handler
 
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.CANCELED
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.PAUSED
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.RUNNING
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.*
 import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType.PIPELINE
 import com.netflix.spinnaker.orca.api.test.pipeline
 import com.netflix.spinnaker.orca.api.test.stage
@@ -28,13 +26,7 @@ import com.netflix.spinnaker.orca.q.CancelExecution
 import com.netflix.spinnaker.orca.q.RescheduleExecution
 import com.netflix.spinnaker.orca.q.ResumeStage
 import com.netflix.spinnaker.q.Queue
-import com.nhaarman.mockito_kotlin.check
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyZeroInteractions
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given
@@ -97,7 +89,7 @@ object CancelExecutionHandlerTest : SubjectSpek<CancelExecutionHandler>({
       }
 
       it("does not send any further messages") {
-        verifyZeroInteractions(queue)
+        verifyNoMoreInteractions(queue)
       }
     }
 

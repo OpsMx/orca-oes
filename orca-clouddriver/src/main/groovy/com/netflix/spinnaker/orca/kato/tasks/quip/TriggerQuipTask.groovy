@@ -76,7 +76,7 @@ class TriggerQuipTask extends AbstractQuipTask implements RetryableTask {
             taskIdMap.put(instanceHostName, ref.substring(1 + ref.lastIndexOf('/')))
             patchedInstanceIds << instanceId
           } catch (SpinnakerServerException e) {
-            log.warn("Error in Quip request: {}", e.message)
+            TriggerQuipTask.log.warn("Error in Quip request: {}", e.message)
           }
         }
       }

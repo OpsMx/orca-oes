@@ -137,19 +137,19 @@ class JarDiffsTask implements DiffTask {
     int numberOfInstancesChecked = 0;
     instances.find { key, instanceInfo ->
       if (numberOfInstancesChecked++ >= 5) {
-        log.info("Unable to check jar list after 5 attempts, giving up!")
+        JarDiffsTask.log.info("Unable to check jar list after 5 attempts, giving up!")
         return true
       }
 
       String hostName = instanceInfo.privateIpAddress ?: instanceInfo.hostName
-      log.debug("attempting to get a jar list from : ${key} (${hostName}:${platformPort})")
+      JarDiffsTask.log.debug("attempting to get a jar list from : ${key} (${hostName}:${platformPort})")
       def instanceService = createInstanceService("http://${hostName}:${platformPort}")
       try {
         def instanceResponse = instanceService.getJars()
         jarMap = objectMapper.readValue(instanceResponse.body.in().text, Map)
         return true
       } catch(Exception e) {
-        log.debug("could not get a jar list from : ${key} (${hostName}:${platformPort}) - ${e.message}")
+        JarDiffsTask.log.debug("could not get a jar list from : ${key} (${hostName}:${platformPort}) - ${e.message}")
         // swallow it so we can try the next instance
         return false
       }
