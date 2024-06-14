@@ -56,7 +56,7 @@ jobs:
                      }
                 }
                }  
-                               tasks.withType(GenerateModuleMetadata).configureEach {
+                     tasks.withType(GenerateModuleMetadata).configureEach {
                                          suppressedValidationErrors.add('enforced-platform')
                                        }
 
