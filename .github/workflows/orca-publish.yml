@@ -3,7 +3,7 @@ name: Branch Build orca publish
 on:
   push:
     branches:
-    - OES-1.30.1
+    - OES-1.33.x
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Xmx6g -Xms6g
 
@@ -48,7 +48,7 @@ jobs:
               repositories {
                  maven{
                  name = 'nexus'
-                 url "https://nexus.opsmx.net/repository/maven-snapshots/"
+                 url "${{ secrets.NEXUS_URL }}"
                   credentials {
                     username = "${{ secrets.NEXUS_USERNAME }}"
                     password = "${{ secrets.NEXUS_PASSWORD }}"
