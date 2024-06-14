@@ -64,9 +64,6 @@ jobs:
              
               ls -d */  | grep "orca\|keiko" | sed 's/\///g' > ds.txt
               
-              # cat ds.txt
-              
-
               for i in $(cat ds.txt) 
               do
                sed  s/NEXUSARTIID/$i/g patch > patchnew
