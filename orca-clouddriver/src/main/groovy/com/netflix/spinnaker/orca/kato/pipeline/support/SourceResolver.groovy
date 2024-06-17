@@ -111,11 +111,9 @@ class SourceResolver {
       regionalAsgs = onlyEnabled
     }
 
-    def instanceSize = { ServerGroup asg -> asg.instances?.size() ?: 0 }
-    def created = { ServerGroup asg -> asg.createdTime ?: 0 }
-    /*if (stageData.useSourceCapacity) {
-      regionalAsgs = regionalAsgs.sort { a1, a2 -> instanceSize(a1) <=> instanceSize(a2) ?: created(a2) <=> created(a1) }
-    }*/
+    if (stageData.useSourceCapacity) {
+      regionalAsgs = regionalAsgs.sort(false, new CompositeComparator([new InstanceCount(), new CreatedTime()]))
+    }
     //with useSourceCapacity prefer the largest ASG over the newest ASG
     def latestAsg = regionalAsgs.last()
     return new StageData.Source(
@@ -135,4 +133,36 @@ class SourceResolver {
     }
   }
 
+  static class InstanceCount implements Comparator<ServerGroup> {
+    @Override
+    int compare(ServerGroup o1, ServerGroup o2) {
+      def size1 = o1.instances?.size() ?: 0
+      def size2 = o2.instances?.size() ?: 0
+      size1 <=> size2
+    }
+  }
+
+  static class CreatedTime implements Comparator<ServerGroup> {
+    @Override
+    int compare(ServerGroup o1, ServerGroup o2) {
+      def createdTime1 = o1.createdTime ?: 0
+      def createdTime2 = o2.createdTime ?: 0
+      createdTime2 <=> createdTime1
+    }
+  }
+
+  static class CompositeComparator implements Comparator<ServerGroup> {
+    private final List<Comparator<ServerGroup>> comparators
+
+    CompositeComparator(List<Comparator<ServerGroup>> comparators) {
+      this.comparators = comparators
+    }
+
+    @Override
+    int compare(ServerGroup o1, ServerGroup o2) {
+      comparators.findResult { it.compare(o1, o2) ?: null } ?: 0
+    }
+  }
 }
+
+

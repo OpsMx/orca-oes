@@ -19,14 +19,7 @@ package com.netflix.spinnaker.orca.q.handler
 import com.netflix.spectator.api.NoopRegistry
 import com.netflix.spinnaker.orca.DefaultStageResolver
 import com.netflix.spinnaker.orca.NoOpTaskImplementationResolver
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.CANCELED
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.FAILED_CONTINUE
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.NOT_STARTED
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.REDIRECT
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.SKIPPED
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.STOPPED
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.SUCCEEDED
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.TERMINAL
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.*
 import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType.PIPELINE
 import com.netflix.spinnaker.orca.api.pipeline.models.TaskExecution
 import com.netflix.spinnaker.orca.api.test.pipeline
@@ -36,29 +29,11 @@ import com.netflix.spinnaker.orca.pipeline.DefaultStageDefinitionBuilderFactory
 import com.netflix.spinnaker.orca.pipeline.model.TaskExecutionImpl
 import com.netflix.spinnaker.orca.pipeline.persistence.ExecutionRepository
 import com.netflix.spinnaker.orca.pipeline.util.ContextParameterProcessor
-import com.netflix.spinnaker.orca.q.CompleteStage
-import com.netflix.spinnaker.orca.q.CompleteTask
-import com.netflix.spinnaker.orca.q.RunTask
-import com.netflix.spinnaker.orca.q.SkipStage
-import com.netflix.spinnaker.orca.q.StageDefinitionBuildersProvider
-import com.netflix.spinnaker.orca.q.StartTask
-import com.netflix.spinnaker.orca.q.buildTasks
-import com.netflix.spinnaker.orca.q.get
-import com.netflix.spinnaker.orca.q.multiTaskStage
-import com.netflix.spinnaker.orca.q.rollingPushStage
-import com.netflix.spinnaker.orca.q.singleTaskStage
+import com.netflix.spinnaker.orca.q.*
 import com.netflix.spinnaker.q.Queue
 import com.netflix.spinnaker.spek.and
 import com.netflix.spinnaker.time.fixedClock
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.check
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyZeroInteractions
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given
@@ -251,7 +226,7 @@ object CompleteTaskHandlerTest : SubjectSpek<CompleteTaskHandler>({
           }
 
           it("does not publish an event") {
-            verifyZeroInteractions(publisher)
+            verifyNoMoreInteractions(publisher)
           }
         }
       }

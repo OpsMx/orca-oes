@@ -36,6 +36,8 @@ import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType
 import com.netflix.spinnaker.orca.config.JedisConfiguration
 import com.netflix.spinnaker.orca.config.RedisConfiguration
 import com.netflix.spinnaker.orca.pipeline.persistence.ExecutionRepository
+import com.netflix.spinnaker.orca.pipeline.tasks.DependsOnExecutionTask
+import com.netflix.spinnaker.orca.pipeline.util.ArtifactUtils
 import com.netflix.spinnaker.orca.q.QueueIntegrationTest
 import com.netflix.spinnaker.orca.q.TestConfig
 import com.netflix.spinnaker.orca.q.migration.ExecutionTypeDeserializer
@@ -166,6 +168,7 @@ class SqlTestConfig {
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
   classes = [
+    MissingBeanConfiguration::class,
     SqlTestConfig::class,
     SqlProperties::class,
     TestConfig::class,
@@ -189,3 +192,16 @@ class SqlTestConfig {
   ]
 )
 class SqlQueueIntegrationTest : QueueIntegrationTest()
+
+@Configuration
+internal class MissingBeanConfiguration {
+  @Bean
+  fun artifactUtils(): ArtifactUtils {
+    return ArtifactUtils(null,null,null)
+  }
+
+  @Bean
+  fun dependsOnExecutionTask(): DependsOnExecutionTask {
+    return DependsOnExecutionTask(null)
+  }
+}

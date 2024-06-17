@@ -23,10 +23,7 @@ import com.netflix.spinnaker.assertj.assertSoftly
 import com.netflix.spinnaker.orca.DefaultStageResolver
 import com.netflix.spinnaker.orca.NoOpTaskImplementationResolver
 import com.netflix.spinnaker.orca.api.pipeline.SyntheticStageOwner.STAGE_BEFORE
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.FAILED_CONTINUE
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.RUNNING
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.SUCCEEDED
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.TERMINAL
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.*
 import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType.PIPELINE
 import com.netflix.spinnaker.orca.api.pipeline.models.StageExecution
 import com.netflix.spinnaker.orca.api.pipeline.models.TaskExecution
@@ -40,58 +37,17 @@ import com.netflix.spinnaker.orca.pipeline.persistence.ExecutionNotFoundExceptio
 import com.netflix.spinnaker.orca.pipeline.persistence.ExecutionRepository
 import com.netflix.spinnaker.orca.pipeline.util.ContextParameterProcessor
 import com.netflix.spinnaker.orca.pipeline.util.StageNavigator
-import com.netflix.spinnaker.orca.q.CompleteExecution
-import com.netflix.spinnaker.orca.q.CompleteStage
-import com.netflix.spinnaker.orca.q.DummyTask
-import com.netflix.spinnaker.orca.q.InvalidExecutionId
-import com.netflix.spinnaker.orca.q.InvalidStageId
-import com.netflix.spinnaker.orca.q.SkipStage
-import com.netflix.spinnaker.orca.q.StageDefinitionBuildersProvider
-import com.netflix.spinnaker.orca.q.StartStage
-import com.netflix.spinnaker.orca.q.StartTask
-import com.netflix.spinnaker.orca.q.buildBeforeStages
-import com.netflix.spinnaker.orca.q.buildTasks
-import com.netflix.spinnaker.orca.q.failPlanningStage
-import com.netflix.spinnaker.orca.q.get
-import com.netflix.spinnaker.orca.q.multiTaskStage
-import com.netflix.spinnaker.orca.q.rollingPushStage
-import com.netflix.spinnaker.orca.q.singleTaskStage
-import com.netflix.spinnaker.orca.q.stageWithParallelBranches
-import com.netflix.spinnaker.orca.q.stageWithSyntheticAfter
-import com.netflix.spinnaker.orca.q.stageWithSyntheticAfterAndNoTasks
-import com.netflix.spinnaker.orca.q.stageWithSyntheticBefore
-import com.netflix.spinnaker.orca.q.webhookStage
-import com.netflix.spinnaker.orca.q.zeroTaskStage
+import com.netflix.spinnaker.orca.q.*
 import com.netflix.spinnaker.q.Queue
 import com.netflix.spinnaker.spek.and
 import com.netflix.spinnaker.time.fixedClock
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.anyOrNull
-import com.nhaarman.mockito_kotlin.atLeastOnce
-import com.nhaarman.mockito_kotlin.argumentCaptor
-import com.nhaarman.mockito_kotlin.check
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.doThrow
-import com.nhaarman.mockito_kotlin.isA
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.spy
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-import com.nhaarman.mockito_kotlin.verifyZeroInteractions
-import com.nhaarman.mockito_kotlin.whenever
-import java.time.Duration
+import com.nhaarman.mockito_kotlin.*
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.context
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.api.dsl.on
+import org.jetbrains.spek.api.dsl.*
 import org.jetbrains.spek.api.lifecycle.CachingMode.GROUP
 import org.jetbrains.spek.subject.SubjectSpek
 import org.springframework.context.ApplicationEventPublisher
+import java.time.Duration
 
 object StartStageHandlerTest : SubjectSpek<StartStageHandler>({
 
@@ -473,7 +429,7 @@ object StartStageHandlerTest : SubjectSpek<StartStageHandler>({
         }
 
         it("does not publish an event") {
-          verifyZeroInteractions(publisher)
+          verifyNoMoreInteractions(publisher)
         }
 
         it("re-queues the message with a delay") {
@@ -517,7 +473,7 @@ object StartStageHandlerTest : SubjectSpek<StartStageHandler>({
         }
 
         it("publishes no events") {
-          verifyZeroInteractions(publisher)
+          verifyNoMoreInteractions(publisher)
         }
 
         it("completes the execution") {
@@ -541,11 +497,11 @@ object StartStageHandlerTest : SubjectSpek<StartStageHandler>({
         }
 
         it("does not queue any messages") {
-          verifyZeroInteractions(queue)
+          verifyNoMoreInteractions(queue)
         }
 
         it("does not publish any events") {
-          verifyZeroInteractions(publisher)
+          verifyNoMoreInteractions(publisher)
         }
       }
     }
@@ -631,7 +587,7 @@ object StartStageHandlerTest : SubjectSpek<StartStageHandler>({
           }
         }
       }
-      
+
       and("parallel stages") {
         val pipeline = pipeline {
           application = "foo"
