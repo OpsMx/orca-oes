@@ -43,11 +43,11 @@ ARG CUSTOMPLUGIN_RELEASE_VERSION
 ENV CUSTOMPLUGIN_RELEASE_VERSION=$CUSTOMPLUGIN_RELEASE_VERSION
 
 
-RUN wget -O Opsmx.VerificationGatePlugin-VerificationPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c https://github.com/OpsMx/Customplugins/releases/download/${CUSTOMPLUGIN_RELEASEVERSION}/VerificationPlugin-${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
-   && wget -O Opsmx.TestVerificationGatePlugin-TestVerificationPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip https://github.com/OpsMx/Customplugins/releases/download/${CUSTOMPLUGIN_RELEASEVERSION}/TestVerificationPlugin-${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
-   && wget -O Opsmx.PolicyGatePlugin-policyPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c  https://github.com/OpsMx/Customplugins/releases/download/${CUSTOMPLUGIN_RELEASEVERSION}/policyPlugin-${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
-   && wget -O Opsmx.PolicyGatePlugin-RbacPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c  https://github.com/OpsMx/Customplugins/releases/download/${CUSTOMPLUGIN_RELEASEVERSION}/RbacPlugin-${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
-   && wget -O Opsmx.VisibilityApprovalPlugin-ApprovalStagePlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c  https://github.com/OpsMx/Customplugins/releases/download/${CUSTOMPLUGIN_RELEASEVERSION}/ApprovalStagePlugin-${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins
+RUN wget -O Opsmx.VerificationGatePlugin-VerificationPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c https://github.com/OpsMx/Customplugins/releases/download/v${CUSTOMPLUGIN_RELEASEVERSION}/VerificationPlugin-v${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
+   && wget -O Opsmx.TestVerificationGatePlugin-TestVerificationPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip https://github.com/OpsMx/Customplugins/releases/download/v${CUSTOMPLUGIN_RELEASEVERSION}/TestVerificationPlugin-v${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
+   && wget -O Opsmx.PolicyGatePlugin-policyPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c  https://github.com/OpsMx/Customplugins/releases/download/v${CUSTOMPLUGIN_RELEASEVERSION}/policyPlugin-v${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
+   && wget -O Opsmx.PolicyGatePlugin-RbacPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c  https://github.com/OpsMx/Customplugins/releases/download/v${CUSTOMPLUGIN_RELEASEVERSION}/RbacPlugin-v${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
+   && wget -O Opsmx.VisibilityApprovalPlugin-ApprovalStagePlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c  https://github.com/OpsMx/Customplugins/releases/download/v${CUSTOMPLUGIN_RELEASEVERSION}/ApprovalStagePlugin-v${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins
 
 RUN mv Opsmx.VerificationGatePlugin-VerificationPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip  /opt/orca/plugins/ \
     && mv Opsmx.TestVerificationGatePlugin-TestVerificationPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip /opt/orca/plugins/ \
@@ -69,7 +69,7 @@ ARG CUSTOMPLUGIN_RELEASEREPO
 ENV CUSTOMPLUGIN_RELEASEREPO=$CUSTOMPLUGIN_RELEASEREPO
 
 
-RUN wget -O Armory.armory-observability-plugin-${CUSTOMPLUGIN_RELEASE_VERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c https://github.com/${CUSTOMPLUGIN_RELEASEORG}/${CUSTOMPLUGIN_RELEASEREPO}/releases/download/${CUSTOMPLUGIN_RELEASE_VERSION}/armory-observability-plugin-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -P /opt/orca/plugins
+RUN wget -O Armory.armory-observability-plugin-${CUSTOMPLUGIN_RELEASE_VERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c https://github.com/${CUSTOMPLUGIN_RELEASEORG}/${CUSTOMPLUGIN_RELEASEREPO}/releases/download/v${CUSTOMPLUGIN_RELEASE_VERSION}/armory-observability-plugin-v${CUSTOMPLUGIN_RELEASE_VERSION}.zip -P /opt/orca/plugins
 RUN mv Armory.armory-observability-plugin-${CUSTOMPLUGIN_RELEASE_VERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip /opt/orca/plugins/
 
 
