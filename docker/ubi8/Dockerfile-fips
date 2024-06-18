@@ -38,6 +38,11 @@ RUN mkdir -p /opt/orca/plugins
 #custom plugin zip files adding
 ARG CUSTOMPLUGIN_RELEASEVERSION
 ENV CUSTOMPLUGIN_RELEASEVERSION=$CUSTOMPLUGIN_RELEASEVERSION
+
+ARG CUSTOMPLUGIN_RELEASE_VERSION
+ENV CUSTOMPLUGIN_RELEASE_VERSION=$CUSTOMPLUGIN_RELEASE_VERSION
+
+
 RUN wget -O Opsmx.VerificationGatePlugin-VerificationPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c https://github.com/OpsMx/Customplugins/releases/download/${CUSTOMPLUGIN_RELEASEVERSION}/VerificationPlugin-${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
    && wget -O Opsmx.TestVerificationGatePlugin-TestVerificationPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip https://github.com/OpsMx/Customplugins/releases/download/${CUSTOMPLUGIN_RELEASEVERSION}/TestVerificationPlugin-${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
    && wget -O Opsmx.PolicyGatePlugin-policyPlugin-${CUSTOMPLUGIN_RELEASEVERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c  https://github.com/OpsMx/Customplugins/releases/download/${CUSTOMPLUGIN_RELEASEVERSION}/policyPlugin-${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P /opt/orca/plugins \
@@ -52,9 +57,6 @@ RUN mv Opsmx.VerificationGatePlugin-VerificationPlugin-${CUSTOMPLUGIN_RELEASEVER
 
 
 
-
-
-
 #RUN wget -O Armory.ObservabilityPlugin-armory-observability-plugin-v1.4.2-SNAPSHOT.zip -c https://github.com/OpsMx/armory-observability-plugin/releases/download/v1.0.0/armory-observability-plugin-v1.4.2-SNAPSHOT.zip -P /opt/orca/plugins 
 #RUN mv Armory.ObservabilityPlugin-armory-observability-plugin-v1.4.2-SNAPSHOT.zip /opt/orca/plugins/
 
@@ -65,9 +67,6 @@ ENV CUSTOMPLUGIN_RELEASEORG=$CUSTOMPLUGIN_RELEASEORG
 
 ARG CUSTOMPLUGIN_RELEASEREPO
 ENV CUSTOMPLUGIN_RELEASEREPO=$CUSTOMPLUGIN_RELEASEREPO
-
-ARG CUSTOMPLUGIN_RELEASE_VERSION
-ENV CUSTOMPLUGIN_RELEASE_VERSION=$CUSTOMPLUGIN_RELEASE_VERSION
 
 
 RUN wget -O Armory.armory-observability-plugin-${CUSTOMPLUGIN_RELEASE_VERSION}-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c https://github.com/${CUSTOMPLUGIN_RELEASEORG}/${CUSTOMPLUGIN_RELEASEREPO}/releases/download/${CUSTOMPLUGIN_RELEASE_VERSION}/armory-observability-plugin-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -P /opt/orca/plugins
