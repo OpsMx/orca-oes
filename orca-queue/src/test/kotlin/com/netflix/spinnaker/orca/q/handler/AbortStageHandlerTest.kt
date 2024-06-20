@@ -31,8 +31,14 @@ import com.netflix.spinnaker.orca.q.CompleteExecution
 import com.netflix.spinnaker.orca.q.CompleteStage
 import com.netflix.spinnaker.q.Queue
 import com.netflix.spinnaker.time.fixedClock
-import com.nhaarman.mockito_kotlin.*
-import com.nhaarman.mockito_kotlin.verifyZeroInteractions
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.check
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.reset
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given
@@ -40,6 +46,7 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.api.lifecycle.CachingMode.GROUP
 import org.jetbrains.spek.subject.SubjectSpek
+import org.mockito.Mockito.verifyNoInteractions
 import org.springframework.context.ApplicationEventPublisher
 
 object AbortStageHandlerTest : SubjectSpek<AbortStageHandler>({
@@ -81,8 +88,8 @@ object AbortStageHandlerTest : SubjectSpek<AbortStageHandler>({
       }
 
       it("does nothing at all") {
-        verifyNoMoreInteractions(queue)
-        verifyNoMoreInteractions(publisher)
+        verifyNoInteractions(queue)
+        verifyNoInteractions(publisher)
         verify(repository, never()).storeStage(any())
       }
     }

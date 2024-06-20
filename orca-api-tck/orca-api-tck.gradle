@@ -33,9 +33,7 @@ dependencies {
   api("org.springframework.boot:spring-boot-starter-test")
   api("org.springframework.security:spring-security-test")
   api("org.springframework.security:spring-security-config")
-  api("com.ninja-squad:springmockk:4.0.2") {
-    force = true
-  }
+  api("com.ninja-squad:springmockk")
 
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
