@@ -19,7 +19,6 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static com.fasterxml.jackson.databind.DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS;
 import static com.fasterxml.jackson.databind.DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE;
-import static com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS;
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS;
 
 import com.fasterxml.jackson.core.Version;
@@ -56,7 +55,6 @@ public class OrcaObjectMapper {
     instance.disable(WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
     instance.disable(FAIL_ON_UNKNOWN_PROPERTIES);
     instance.enable(READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
-    instance.disable(FAIL_ON_EMPTY_BEANS);
     instance.setSerializationInclusion(NON_NULL);
 
     // Jackson cannot deserialize an interface. For interfaces defined by orca-api, we need to tell
