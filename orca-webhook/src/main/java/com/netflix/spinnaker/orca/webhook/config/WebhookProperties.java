@@ -18,6 +18,7 @@ package com.netflix.spinnaker.orca.webhook.config;
 
 import com.netflix.spinnaker.fiat.model.resources.Role;
 import com.netflix.spinnaker.orca.api.preconfigured.jobs.PreconfiguredStageParameter;
+import com.netflix.spinnaker.orca.webhook.http.HttpMethod;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +30,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.http.HttpMethod;
 
 @ConfigurationProperties("webhook")
 @Data
