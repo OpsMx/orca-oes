@@ -20,6 +20,11 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.lang.Nullable;
 
+/**
+ * OP-22069: As part of CVE fixes, spring-web has been upgraded. In the new package, HttpMethod is
+ * converted to a class from Enum. Due to this change, ObjectMapper cannot
+ * serialize @org.springframework.http.HttpMethod, so we created this Enum to support serialization.
+ */
 public enum HttpMethod {
   GET,
   HEAD,
