@@ -2,7 +2,17 @@ name: Branch Build orca
 
 on:
   workflow_call:
-  workflow_dispatch:        
+  workflow_dispatch: 
+    inputs:
+      CUSTOMPLUGIN_RELEASEVERSION:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'CUSTOMPLUGIN_RELEASEVERSION version'
+        # Default value if no value is explicitly provided
+        default: 'v4.0.4.2-rc5'
+        # Input has to be provided for the workflow to run
+        required: false
+        # The data type of the input
+        type: string
   push:
     branches:
     - OES-1.30.1
@@ -59,7 +69,7 @@ jobs:
         with:
           context: .
           build-args: |
-            CUSTOMPLUGIN_RELEASEVERSION=v4.0.4.2-rc5
+            CUSTOMPLUGIN_RELEASEVERSION=${{ inputs.CUSTOMPLUGIN_RELEASEVERSION }} 
             CUSTOMPLUGIN_RELEASEORG=opsmx
             CUSTOMPLUGIN_RELEASEREPO=armory-observability-plugin
             CUSTOMPLUGIN_RELEASE_VERSION=v1.0.1
@@ -73,7 +83,7 @@ jobs:
         with:
           context: .
           build-args: |
-            CUSTOMPLUGIN_RELEASEVERSION=v4.0.4.2-rc5
+            CUSTOMPLUGIN_RELEASEVERSION=${{ inputs.CUSTOMPLUGIN_RELEASEVERSION }} 
             CUSTOMPLUGIN_RELEASEORG=opsmx
             CUSTOMPLUGIN_RELEASEREPO=armory-observability-plugin
             CUSTOMPLUGIN_RELEASE_VERSION=v1.0.1
