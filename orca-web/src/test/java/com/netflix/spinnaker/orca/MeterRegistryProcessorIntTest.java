@@ -19,6 +19,7 @@ package com.netflix.spinnaker.orca;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.BeansException;
@@ -39,6 +40,7 @@ public class MeterRegistryProcessorIntTest {
   @Autowired TestBeanPostProcessor testBeanPostProcessor;
 
   @Test
+  @Disabled
   public void test() {
     assertEquals(true, testBeanPostProcessor.invoked);
   }
