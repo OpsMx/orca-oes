@@ -34,6 +34,7 @@ dependencies {
   testImplementation("io.spinnaker.fiat:fiat-core:$fiatVersion")
   testImplementation "cglib:cglib-nodep:3.3.0"
 
+  testImplementation("com.github.tomakehurst:wiremock-jre8-standalone")
 }
 
 sourceSets {
