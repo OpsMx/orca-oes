@@ -18,7 +18,7 @@
 package com.netflix.spinnaker.orca.webhook.config
 
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
+import com.netflix.spinnaker.orca.webhook.http.HttpMethod
 import spock.lang.Specification
 import spock.lang.Unroll
 
