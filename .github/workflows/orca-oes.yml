@@ -2,10 +2,21 @@ name: Branch Build orca
 
 on:
   workflow_call:
-  workflow_dispatch:
+  workflow_dispatch: 
+    inputs:
+      CUSTOMPLUGIN_RELEASEVERSION:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'CUSTOMPLUGIN_RELEASEVERSION Version'
+        # Default value if no value is explicitly provided
+        default: 'v4.0.4.2-rc5'
+        # Input has to be provided for the workflow to run
+        required: false
+        # The data type of the input
+        type: string
   push:
     branches:
     - OES-1.33.x
+
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Xmx6g -Xms6g
