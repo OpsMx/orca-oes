@@ -36,6 +36,11 @@ RUN useradd spinnaker
 RUN mkdir -p ${SERVICE_PLUGIN_PATH}
 
 
+
+#custom plugin zip files adding
+ARG CUSTOMPLUGIN_RELEASEVERSION
+ENV CUSTOMPLUGIN_RELEASEVERSION=$CUSTOMPLUGIN_RELEASEVERSION
+ARG CUSTOMPLUGIN_RELEASE_VERSION
 ENV CUSTOMPLUGIN_RELEASE_VERSION=$CUSTOMPLUGIN_RELEASE_VERSION
 
 RUN wget -O Opsmx.VerificationGatePlugin-VerificationPlugin-${CUSTOMPLUGIN_RELEASE_VERSION}.zip -c https://github.com/OpsMx/Customplugins/releases/download/v${CUSTOMPLUGIN_RELEASEVERSION}/VerificationPlugin-v${CUSTOMPLUGIN_RELEASE_VERSION}-SNAPSHOT.zip -P ${SERVICE_PLUGIN_PATH} \
@@ -59,8 +64,6 @@ RUN wget -O Armory.armory-observability-plugin-${CUSTOMPLUGIN_RELEASE_VERSION}.z
 RUN mv Armory.armory-observability-plugin-${CUSTOMPLUGIN_RELEASE_VERSION}.zip ${SERVICE_PLUGIN_PATH}/
 
 RUN chmod -R 777 ${SERVICE_PLUGIN_PATH}/
-
-
 RUN chown -R spinnaker:spinnaker /opt/
 RUN yum -y remove  tar  vim vi
 RUN yum -y remove clean all && rm -rf /var/cache
