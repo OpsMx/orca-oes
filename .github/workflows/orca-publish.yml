@@ -8,7 +8,7 @@ env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Xmx6g -Xms6g
 
 jobs:
-  publish-kork:
+  publish-orca:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
