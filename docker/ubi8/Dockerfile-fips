@@ -27,7 +27,12 @@ COPY orca-web/build/install/orca /opt/orca
 
 #RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Critical --setopt=tsflags=nodocs
 #RUN yum -y install java-17-openjdk-devel wget vim curl net-tools nettle
-RUN yum -y install wget
+
+#cve fix 
+RUN yum install wget  krb5-libs-1.18.2-29.el8_10  expat-2.2.5-15.el8_10 -y
+RUN yum install ca-certificates-2024.2.69_v8.0.303-80.0.el8_10 -y
+
+
 #RUN yum -y update
 RUN useradd spinnaker
 RUN mkdir -p ${SERVICE_PLUGIN_PATH}
