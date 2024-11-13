@@ -68,6 +68,10 @@ jobs:
           
            ./gradlew --no-daemon -PenableCrossCompilerPlugin=true orca-web:installDist -x test
 
+      - name: Debug Input Value
+        run: |
+          echo "CUSTOMPLUGIN_NAME: ${{ github.event.inputs.CUSTOMPLUGIN_NAME }}"
+     
       - name: dockerBuildpush
         uses: docker/build-push-action@v2
         with:
@@ -81,13 +85,12 @@ jobs:
           push: true
           tags: |
              "${{ env.CONTAINER_REGISTRY }}/${{ steps.build_variables.outputs.REPO }}:${{ steps.build_variables.outputs.VERSION }}-${{ steps.build_variables.outputs.GITHASH }}-${{ steps.build_variables.outputs.BUILDDATE }}"
-
+          
       - name: dockerBuildpushdev
         uses: docker/build-push-action@v2
         with:
           context: .
           build-args: |
-            echo ${{ github.event.inputs.CUSTOMPLUGIN_NAME }}
             CUSTOMPLUGIN_RELEASEVERSION=${{ github.event.inputs.CUSTOMPLUGIN_NAME }}
             CUSTOMPLUGIN_RELEASEORG=opsmx
             CUSTOMPLUGIN_RELEASEREPO=armory-observability-plugin
