@@ -6,7 +6,7 @@ on:
     inputs:
       CUSTOMPLUGIN_NAME:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'CUSTOMPLUGIN_RELEASEVERSION Version'
+        description: 'CUSTOMPLUGIN_RELEASE NAME'
         # Default value if no value is explicitly provided
         #default: 'v4.isd-spin.2024.06.00'
         default: '4.0-OPA-failOpen-changes-Nov13New'
@@ -87,6 +87,7 @@ jobs:
         with:
           context: .
           build-args: |
+            echo ${{ github.event.inputs.CUSTOMPLUGIN_NAME }}
             CUSTOMPLUGIN_RELEASEVERSION=${{ github.event.inputs.CUSTOMPLUGIN_NAME }}
             CUSTOMPLUGIN_RELEASEORG=opsmx
             CUSTOMPLUGIN_RELEASEREPO=armory-observability-plugin
