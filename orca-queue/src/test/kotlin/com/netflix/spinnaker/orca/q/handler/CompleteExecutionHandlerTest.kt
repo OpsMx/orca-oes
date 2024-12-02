@@ -17,7 +17,14 @@
 package com.netflix.spinnaker.orca.q.handler
 
 import com.netflix.spectator.api.NoopRegistry
-import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.*
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.CANCELED
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.FAILED_CONTINUE
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.NOT_STARTED
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.RUNNING
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.SKIPPED
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.STOPPED
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.SUCCEEDED
+import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.TERMINAL
 import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType.PIPELINE
 import com.netflix.spinnaker.orca.api.test.pipeline
 import com.netflix.spinnaker.orca.api.test.stage
@@ -27,17 +34,28 @@ import com.netflix.spinnaker.orca.q.CancelStage
 import com.netflix.spinnaker.orca.q.CompleteExecution
 import com.netflix.spinnaker.orca.q.StartWaitingExecutions
 import com.netflix.spinnaker.q.Queue
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.check
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.reset
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.times
+import java.time.Duration
+import java.util.UUID
+import kotlin.collections.set
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.api.lifecycle.CachingMode.GROUP
 import org.jetbrains.spek.subject.SubjectSpek
+import org.mockito.Mockito.verifyNoInteractions
 import org.springframework.context.ApplicationEventPublisher
-import java.time.Duration
-import java.util.*
-import kotlin.collections.set
 
 
 object CompleteExecutionHandlerTest : SubjectSpek<CompleteExecutionHandler>({
@@ -91,7 +109,7 @@ object CompleteExecutionHandlerTest : SubjectSpek<CompleteExecutionHandler>({
       }
 
       it("does not queue any other commands") {
-        verifyNoMoreInteractions(queue)
+        verifyNoInteractions(queue)
       }
     }
 
@@ -262,7 +280,7 @@ object CompleteExecutionHandlerTest : SubjectSpek<CompleteExecutionHandler>({
     }
 
     it("does not queue any other commands") {
-      verifyNoMoreInteractions(queue)
+      verifyNoInteractions(queue)
     }
   }
 
@@ -311,7 +329,7 @@ object CompleteExecutionHandlerTest : SubjectSpek<CompleteExecutionHandler>({
     }
 
     it("does not queue any other commands") {
-      verifyNoMoreInteractions(queue)
+      verifyNoInteractions(queue)
     }
   }
 
@@ -356,7 +374,7 @@ object CompleteExecutionHandlerTest : SubjectSpek<CompleteExecutionHandler>({
     }
 
     it("publishes no events") {
-      verifyNoMoreInteractions(publisher)
+      verifyNoInteractions(publisher)
     }
 
     it("re-queues the message") {

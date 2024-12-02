@@ -26,13 +26,20 @@ import com.netflix.spinnaker.orca.q.buildBeforeStages
 import com.netflix.spinnaker.orca.q.singleTaskStage
 import com.netflix.spinnaker.orca.q.stageWithSyntheticBefore
 import com.netflix.spinnaker.q.Queue
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.check
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.reset
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.lifecycle.CachingMode.GROUP
 import org.jetbrains.spek.subject.SubjectSpek
+import org.mockito.Mockito.verifyNoInteractions
 
 object PauseStageHandlerTest : SubjectSpek<PauseStageHandler>({
 
@@ -80,7 +87,7 @@ object PauseStageHandlerTest : SubjectSpek<PauseStageHandler>({
     }
 
     it("does not take any further action") {
-      verifyNoMoreInteractions(queue)
+      verifyNoInteractions(queue)
     }
   }
 

@@ -18,17 +18,23 @@ package com.netflix.spinnaker.orca.q.handler
 
 import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.TERMINAL
 import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType.PIPELINE
-import com.netflix.spinnaker.orca.q.*
+import com.netflix.spinnaker.orca.q.AbortStage
+import com.netflix.spinnaker.orca.q.CompleteExecution
+import com.netflix.spinnaker.orca.q.CompleteTask
+import com.netflix.spinnaker.orca.q.DummyTask
+import com.netflix.spinnaker.orca.q.RunTask
+import com.netflix.spinnaker.orca.q.StartExecution
+import com.netflix.spinnaker.orca.q.StartStage
 import com.netflix.spinnaker.q.Queue
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.api.lifecycle.CachingMode.GROUP
 import org.jetbrains.spek.subject.SubjectSpek
+import org.mockito.Mockito.verifyNoInteractions
 
 object DeadMessageHandlerTest : SubjectSpek<DeadMessageHandler>({
 
@@ -94,7 +100,7 @@ object DeadMessageHandlerTest : SubjectSpek<DeadMessageHandler>({
     }
 
     it("does nothing") {
-      verifyNoMoreInteractions(queue)
+      verifyNoInteractions(queue)
     }
   }
 })

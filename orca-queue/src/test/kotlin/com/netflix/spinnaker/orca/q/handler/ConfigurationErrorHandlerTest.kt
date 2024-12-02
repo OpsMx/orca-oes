@@ -19,17 +19,23 @@ package com.netflix.spinnaker.orca.q.handler
 import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionStatus.TERMINAL
 import com.netflix.spinnaker.orca.api.pipeline.models.ExecutionType.PIPELINE
 import com.netflix.spinnaker.orca.pipeline.persistence.ExecutionRepository
-import com.netflix.spinnaker.orca.q.*
+import com.netflix.spinnaker.orca.q.ConfigurationError
+import com.netflix.spinnaker.orca.q.InvalidExecutionId
+import com.netflix.spinnaker.orca.q.InvalidStageId
+import com.netflix.spinnaker.orca.q.InvalidTask
+import com.netflix.spinnaker.orca.q.InvalidTaskId
+import com.netflix.spinnaker.orca.q.InvalidTaskType
+import com.netflix.spinnaker.orca.q.NoDownstreamTasks
 import com.netflix.spinnaker.q.Queue
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.api.lifecycle.CachingMode.GROUP
 import org.jetbrains.spek.subject.SubjectSpek
+import org.mockito.Mockito.verifyNoInteractions
 
 object ConfigurationErrorHandlerTest : SubjectSpek<ConfigurationErrorHandler>({
 
@@ -51,11 +57,11 @@ object ConfigurationErrorHandlerTest : SubjectSpek<ConfigurationErrorHandler>({
       }
 
       it("does not try to update the execution status") {
-        verifyNoMoreInteractions(repository)
+        verifyNoInteractions(repository)
       }
 
       it("does not push any messages to the queue") {
-        verifyNoMoreInteractions(queue)
+        verifyNoInteractions(queue)
       }
     }
   }
@@ -78,7 +84,7 @@ object ConfigurationErrorHandlerTest : SubjectSpek<ConfigurationErrorHandler>({
       }
 
       it("does not push any messages to the queue") {
-        verifyNoMoreInteractions(queue)
+        verifyNoInteractions(queue)
       }
     }
   }
