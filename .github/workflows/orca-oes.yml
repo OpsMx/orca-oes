@@ -8,7 +8,7 @@ on:
         # Friendly description to be shown in the UI instead of 'name'
         description: 'CUSTOMPLUGIN_NAME'
         # Default value if no value is explicitly provided
-        default: 'v4.isd-spin.2024.06.00'
+        default: 'v4.isd-spin.2024.12.00'
         #default: 'v4.0-OPA-failOpen-changes-Nov13New'
         # Input has to be provided for the workflow to run
         required: false
@@ -79,7 +79,7 @@ jobs:
         with:
           context: .
           build-args: |
-            CUSTOMPLUGIN_RELEASENAME=v4.0-policy-DevTag-Dec10-new
+            CUSTOMPLUGIN_RELEASENAME=v4.isd-spin.2024.12.00
             CUSTOMPLUGIN_RELEASEORG=opsmx
             CUSTOMPLUGIN_RELEASEREPO=armory-observability-plugin
             CUSTOMPLUGIN_RELEASE_VERSION=1.0.1
@@ -93,7 +93,7 @@ jobs:
         with:
           context: .
           build-args: |
-            CUSTOMPLUGIN_RELEASENAME=v4.0-policy-DevTag-Dec10-new
+            CUSTOMPLUGIN_RELEASENAME=v4.isd-spin.2024.12.00
             CUSTOMPLUGIN_RELEASEORG=opsmx
             CUSTOMPLUGIN_RELEASEREPO=armory-observability-plugin
             CUSTOMPLUGIN_RELEASE_VERSION=1.0.1
